@@ -1970,16 +1970,10 @@ describe('ContentDetailsPage', () => {
         it('should return content not downloaded for undefined downloadUrl', (done) => {
             contentDetailsPage.content = { contentData: { name: 'matrix', size: 101100 , downloadUrl: ''} };
             mockCommonUtilService.showToast = jest.fn();
-            mockFileSizePipe.transform = jest.fn(() => '');
-            mockPopoverController.create = jest.fn(() => (Promise.resolve({
-                present: jest.fn(() => Promise.resolve({})),
-                onDidDismiss: jest.fn(() => Promise.resolve({ data: { canDelete: true } }))
-            } as any)));
             // act
             contentDetailsPage.openConfirmPopUp();
             setTimeout(() => {
-                expect(mockFileSizePipe.transform).toHaveBeenCalled();
-                expect(mockPopoverController.create).toHaveBeenCalled();
+                expect(mockCommonUtilService.showToast).toHaveBeenCalledWith('DOWNLOAD_NOT_ALLOWED_FOR_QUIZ');
                 done();
             }, 0);
         });

@@ -1,4 +1,4 @@
-import { AuthService, DebuggingService, Profile, ProfileService, SegmentationService, SharedPreferences } from '@project-sunbird/sunbird-sdk';
+import { AuthService, Profile, ProfileService, SegmentationService, SharedPreferences } from '@project-sunbird/sunbird-sdk';
 import { of } from 'rxjs';
 import { AppGlobalService } from '../app-global-service.service';
 import { FormAndFrameworkUtilService } from '../formandframeworkutil.service';
@@ -6,7 +6,6 @@ import { SegmentationTagService } from './segmentation-tag.service';
 import { NotificationService } from '@app/services/notification.service';
 import { cmdList, validCmdList } from './segmentation-tag.service.spec.data';
 import { SplaschreenDeeplinkActionHandlerDelegate } from '../sunbird-splashscreen/splaschreen-deeplink-action-handler-delegate';
-import { Events } from '@app/util/events';
 
 describe('SegmentationTagService ', () => {
     let segmentationTagService: SegmentationTagService;
@@ -32,11 +31,8 @@ describe('SegmentationTagService ', () => {
         getString: jest.fn(() => of('key_value'))
     };
     const mockSplaschreenDeeplinkActionHandlerDelegate: Partial<SplaschreenDeeplinkActionHandlerDelegate> = {
-        onAction: jest.fn(() => of(undefined))
+        onAction: jest.fn()
     };
-
-    const mockEvent: Partial<Events> = {};
-    const mockDebuggingService: Partial<DebuggingService> = {};
 
     global.window.segmentation = {
         init: jest.fn(),
@@ -56,12 +52,10 @@ describe('SegmentationTagService ', () => {
             mockProfileService as ProfileService,
             mockAuthService as AuthService,
             mockSharedPreferences as SharedPreferences,
-            mockDebuggingService as DebuggingService,
             mockNotificationSrc as NotificationService,
             mockAppGlobalService as AppGlobalService,
             mockFormAndFrameworkUtilService as FormAndFrameworkUtilService,
-            mockSplaschreenDeeplinkActionHandlerDelegate as SplaschreenDeeplinkActionHandlerDelegate,
-            mockEvent as Events
+            mockSplaschreenDeeplinkActionHandlerDelegate as SplaschreenDeeplinkActionHandlerDelegate
         );
     });
 
