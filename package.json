@@ -65,12 +65,12 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@project-sunbird/client-services": "5.0.0",
-    "@project-sunbird/common-consumption-v9": "5.0.0",
+    "@project-sunbird/common-consumption-v10": "4.11.0",
     "@project-sunbird/common-form-elements-v9": "5.0.3",
     "@project-sunbird/content-player": "4.4.0",
     "@project-sunbird/discussions-ui-v8": "2.6.0-beta.2",
     "@project-sunbird/sb-dashlet": "1.0.4",
-    "@project-sunbird/sb-notification": "^5.0.1",
+    "@project-sunbird/sb-notification": "5.0.8",
     "@project-sunbird/sb-styles": "0.0.9",
     "@project-sunbird/sunbird-epub-player-v9": "4.8.1",
     "@project-sunbird/sunbird-pdf-player-v9": "4.8.1",
@@ -215,7 +215,7 @@
     "tiny-glob": "^0.2.9",
     "ts-node": "^8.4.1",
     "tslint": "~5.16.0",
-    "typescript": "3.8.3"
+    "typescript": "4.0.8"
   },
   "description": "An Ionic project",
   "cordova": {
@@ -339,10 +339,10 @@
       "^sunbird-sdk": "<rootDir>/node_modules/@project-sunbird/sunbird-sdk",
       "^sunbird-sdk/(.*)$": "<rootDir>/node_modules/@project-sunbird/sunbird-sdk/$1",
       "@project-sunbird/common-consumption": [
-        "<rootDir>/node_modules/@project-sunbird/common-consumption-v9"
+        "<rootDir>/node_modules/@project-sunbird/common-consumption-v10"
       ],
       "@project-sunbird/common-consumption/*": [
-        "<rootDir>/node_modules/@project-sunbird/common-consumption-v9/*"
+        "<rootDir>/node_modules/@project-sunbird/common-consumption-v10/*"
       ],
       "common-form-elements": [
         "<rootDir>/node_modules/@project-sunbird/common-form-elements-v9"
