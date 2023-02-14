@@ -262,7 +262,7 @@ export class ProfilePage implements OnInit {
             this.refresh = false;
             await loader.dismiss();
             await this.sbProgressLoader.hide({ id: 'login' });
-            resolve();
+            resolve(true);
           }, 500);
           // This method is used to handle trainings completed by user
           this.getLearnerPassbook();
@@ -351,7 +351,7 @@ export class ProfilePage implements OnInit {
                     that.getOrgDetails();
                     that.isCustodianOrgId = (that.profile.rootOrg.rootOrgId === this.custodianOrgId);
                     that.isStateValidated = that.profile.stateValidated;
-                    resolve();
+                    resolve(true);
                   });
                   if(profileData && profileData.framework && Object.keys(profileData.framework).length == 0) {
                     await this.getFrameworkDetails();

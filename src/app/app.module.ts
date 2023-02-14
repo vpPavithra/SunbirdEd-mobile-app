@@ -85,6 +85,7 @@ import { StoragePermissionHandlerService } from '@app/services/storage-permissio
 import { TranslateJsonPipe } from '@app/pipes/translate-json/translate-json';
 import { OnboardingConfigurationService } from '@app/services/onboarding-configuration.service';
 import onboarding from './../assets/configurations/config.json';
+import '@angular/compiler';
 // AoT requires an exported function for factories
 export function translateHttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');

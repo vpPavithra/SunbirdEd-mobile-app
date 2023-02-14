@@ -123,7 +123,7 @@ describe('collectionDetailEtbPage', () => {
         navigateToCollection: jest.fn()
     };
 
-    global.window.segmentation = {
+    global.window['segmentation'] = {
         init: jest.fn(),
         SBTagService: {
             pushTag: jest.fn(),

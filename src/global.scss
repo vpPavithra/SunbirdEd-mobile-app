@@ -27,8 +27,8 @@
   --width: 100%;
   position: absolute;
 }
-.popover-alert .popover-content.sc-ion-popover-md, 
-.popover-alert .popover-content.sc-ion-popover-ios {
+.popover-alert::part(content).sc-ion-popover-md, 
+.popover-alert::part(content).sc-ion-popover-ios {
   top: unset !important;
   bottom: 0;
   left: 0 !important;
@@ -224,3 +224,11 @@ sunbird-pdf-player .sunbird-pdf-palyer-container pdf-viewer iframe{
   font-weight: 500;
   align-self: flex-start;
 }
+
+// :host{
+//   .item-label-stacked {
+//     ion-select::part(icon) {
+//       transform: translate3d(0px, 0px, 0px) !important;
+//     }
+//   }
+// }

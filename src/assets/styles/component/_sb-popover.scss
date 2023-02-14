@@ -219,6 +219,30 @@
   // ****
 }
 
+.sb-popover::part(content) {
+  margin: 0;
+  width: 100% !important;
+  height: auto;
+  box-shadow: unset;
+  position: fixed;
+  box-shadow: none;
+  @include ltr() {
+    left: 0 !important;
+  }
+
+  @include rtl() {
+    right: 0 !important;
+  }
+  top: unset !important;
+  bottom: 0;
+  transform-origin: bottom -100% !important;
+  transform: translateY(0) !important;
+  overflow-y: hidden;
+  border-radius: 4px 4px 0 0;
+  background: transparent;
+  //background-color: $info-color;
+}
+
 .enrollement-popover {
   background: rgba(0, 0, 0, 0.51);
   .popover-content {
@@ -227,6 +251,27 @@
     bottom: 0px;
     top: auto !important;
     width: auto !important;
+  }
+}
+
+.enrollement-popover::part(content) {
+  left: 0px !important;
+  right: 0px;
+  bottom: 0px;
+  top: auto !important;
+  width: auto !important;
+}
+
+.sb-popover-items::part(content) {
+  //background-color: $danger-color;
+  .sb-popover-items {
+    padding: 16px;
+    .icon-container {
+      ion-icon {
+        font-size: ($font-size-base * 2)+0.125;
+        color: $danger-color;
+      }
+    }
   }
 }
 
@@ -256,6 +301,19 @@
   }
 }
 
+.sb-popover-warning::part(content) {
+  // background-color: $warning-color;
+  .sb-popover-items {
+    padding: 16px;
+    .icon-container {
+      ion-icon {
+        font-size: ($font-size-base * 2)+0.125;
+        color: $tertiary-color;
+      }
+    }
+  }
+}
+
 .sb-popover.warning {
   .sb-popover-header {
     background-color: $tertiary-color;
@@ -280,6 +338,17 @@
   }
 }
 
+.sb-popover.success::part(content) {
+  .sb-popover-items {
+    padding: 16px;
+    .icon-container {
+      ion-icon {
+        font-size: ($font-size-base * 2)+0.125;
+        color: #008840;
+      }
+    }
+  }
+}
 .sb-popover.success {
   .sb-popover-header {
     background-color: #008840;
@@ -430,6 +499,13 @@
   background-color: $success-color;
 }
 
+.content-rating-alert::part(content){
+  --max-height: 100% !important;
+  background: map-get($colors, white) !important;
+  .rating-full-height {
+    height: 100vh !important;
+  }
+}
 .content-rating-alert{
   --height: 100vh !important;
   --max-height: 100% !important;

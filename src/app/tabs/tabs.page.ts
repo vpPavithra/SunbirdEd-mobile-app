@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Inject, OnInit, ViewChild, ViewEncapsulation 
 import { Router } from '@angular/router';
 import { EventTopics, PreferenceKey, ProfileConstants, RouterLinks, SwitchableTabsConfig } from '@app/app/app.constant';
 import { initTabs } from '@app/app/module.service';
-import { OnTabViewWillEnter } from '@app/app/tabs/on-tab-view-will-enter';
+import { OnTabViewWillEnter } from './on-tab-view-will-enter';
 import { PageId } from '@app/services';
 import { AppGlobalService } from '@app/services/app-global-service.service';
 import { CommonUtilService } from '@app/services/common-util.service';
@@ -112,8 +112,9 @@ export class TabsPage implements OnInit, AfterViewInit {
   }
 
   ionViewWillEnter() {
-    if (this.tabRef.outlet.component['tabViewWillEnter']) {
-      (this.tabRef.outlet.component as OnTabViewWillEnter).tabViewWillEnter();
+    let tabView = (this.tabRef.outlet).component as unknown as OnTabViewWillEnter;
+    if (tabView['tabViewWillEnter']) {
+      tabView.tabViewWillEnter();
     }
     this.tabs = this.container.getAllTabs();
     this.events.publish('update_header');

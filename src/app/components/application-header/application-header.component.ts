@@ -495,7 +495,7 @@ export class ApplicationHeaderComponent implements OnInit, OnDestroy {
       cordova.plugins.InAppUpdateManager.isUpdateAvailable((result: string) => {
         if (result) {
           this.isUpdateAvailable = true;
-          resolve();
+          resolve(true);
         }
       }, () => { });
     }));

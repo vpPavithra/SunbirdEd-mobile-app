@@ -371,7 +371,7 @@ export class CoursesPage implements OnInit, OnDestroy {
       } else {
         const sessionObj = this.appGlobalService.getSessionData();
         this.userId = sessionObj[ProfileConstants.USER_TOKEN];
-        resolve();
+        resolve(true);
       }
     });
   }
