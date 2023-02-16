@@ -128,7 +128,9 @@ describe('ObservationHomeComponent', () => {
     it('should call getLocalData if network is not available', (done) => {
       observationHomeComponent.networkFlag = false;
      jest.spyOn(observationHomeComponent, 'getPrograms');
-     jest.spyOn(observationHomeComponent, 'getLocalData');
+     jest.spyOn(observationHomeComponent, 'getLocalData').mockImplementation(() => {
+       return
+     });
       observationHomeComponent.getProfileInfo().then(() => {
         expect(observationHomeComponent.getPrograms).not.toHaveBeenCalled();
         expect(observationHomeComponent.getLocalData).toHaveBeenCalled();

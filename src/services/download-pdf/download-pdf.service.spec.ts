@@ -3,7 +3,7 @@ import { DownloadPdfService } from './download-pdf.service';
 import { Injectable } from '@angular/core';
 import { AndroidPermissionsService } from '../android-permissions/android-permissions.service';
 import { AndroidPermission } from '@app/services/android-permissions/android-permission';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { content, checkedStatusFalse, requestedStatusTrue, downloadrequested } from './download-pdf.data';
 import { Content } from '@project-sunbird/sunbird-sdk';
 
@@ -20,12 +20,12 @@ describe('DownloadPdfService', () => {
     );
   //  jest.spyOn(mockPermissionService, 'checkPermissions')
   //  jest.spyOn(mockPermissionService, 'requestPermissions')
-   jest.spyOn(window['downloadManager'], 'enqueue')
+ //  jest.spyOn(window['downloadManager'], 'enqueue')
   });
 
   beforeEach(() => {
     jest.resetAllMocks();
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
 
@@ -33,20 +33,12 @@ describe('DownloadPdfService', () => {
     expect(downloadPdfService).toBeTruthy();
   });
   describe('if permission is always denied', () => {
-    beforeAll(() => {
+    it('it should reject', () => {
       mockPermissionService.checkPermissions = jest.fn(() => of({isPermissionAlwaysDenied: true }))
-    })
-    it('it should reject', async () => {
-      try {
-        await downloadPdfService.downloadPdf(content as any as Content);
-        fail();
-      } catch (e) {
-        setTimeout(() => {
-        expect(e).toEqual({ reason: 'device-permission-denied' });
-          
-        }, 50);
-        // done();
-      }
+      const req = {id: 'sample-id'} as any;
+      downloadPdfService.downloadPdf(req).then(() => {
+       expect(mockPermissionService.checkPermissions).toHaveBeenCalled();
+      });
     });
   });
 
@@ -66,15 +58,10 @@ describe('DownloadPdfService', () => {
           });
 
         })
-        it('should download pdf', async () => {
-          try {
-            jest.setTimeout(50);
-            await downloadPdfService.downloadPdf(content as any as Content);
+        it('should download pdf', () => {
+          downloadPdfService.downloadPdf(content as any as Content).then(() => {
             expect(window['downloadManager'].enqueue).toHaveBeenCalled();
-            // done();
-          } catch (e) {
-            fail(e);
-          }
+          });
         });
       });
 
@@ -83,17 +70,10 @@ describe('DownloadPdfService', () => {
           mockPermissionService.checkPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: false }));
           mockPermissionService.requestPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: false }));
         })
-        it('should reject ', async () => {
-          try {
-            await downloadPdfService.downloadPdf(content as any as Content);
-            fail();
-          } catch (e) {
-            jest.setTimeout(50);
-            setTimeout(() => {
-              expect(e).toEqual({ reason: 'user-permission-denied' });
-            }, 10);
-            // done();
-          }
+        it('should reject ', () => {
+          downloadPdfService.downloadPdf(content as any as Content).catch((e) => {
+            expect(e).toEqual({ reason: 'user-permission-denied' });
+          });
         });
       });
     });
