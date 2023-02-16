@@ -20,7 +20,7 @@ import { AppGlobalService, LoginHandlerService } from '../../services';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 jest.mock('@project-sunbird/sunbird-sdk', () => {
-    const actual = require.requireActual('@project-sunbird/sunbird-sdk');
+    const actual = jest.requireActual('@project-sunbird/sunbird-sdk');
     return {
         ...actual,
         WebviewStateSessionProvider() {

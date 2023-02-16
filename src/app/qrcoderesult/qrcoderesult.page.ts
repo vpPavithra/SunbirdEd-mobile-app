@@ -130,7 +130,7 @@ export class QrcoderesultPage implements OnDestroy {
   stckyindex: string;
   chapterFirstChildId: string;
   showSheenAnimation = true;
-  @ViewChild(iContent, { static: false }) ionContent: iContent;
+  @ViewChild('iContent', { static: false }) ionContent: iContent;
   onboarding = false;
   dialCode: string;
 

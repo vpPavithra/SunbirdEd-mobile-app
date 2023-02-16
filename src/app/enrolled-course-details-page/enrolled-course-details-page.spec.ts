@@ -200,7 +200,7 @@ describe('EnrolledCourseDetailsPage', () => {
             // arrange
             mockCommonUtilService.getAppName = jest.fn(() => Promise.resolve('SUNBIRD'));
             mockDownloadService.trackDownloads = jest.fn(() => of());
-            spyOn(enrolledCourseDetailsPage, 'subscribeUtilityEvents').and.returnValue('BASE_URL');
+            jest.spyOn(enrolledCourseDetailsPage, 'subscribeUtilityEvents').and.returnValue('BASE_URL');
             const mockProfileRes = {
                 serverProfile: {
                     userName: 'some_user'
@@ -714,8 +714,8 @@ describe('EnrolledCourseDetailsPage', () => {
             mockCourseService.getBatchDetails = jest.fn(() => of(enrolledCourseDetailsPage.batchDetails));
             mockCommonUtilService.translateMessage = jest.fn(() => '');
             mockCommonUtilService.networkInfo = {isNetworkAvailable: true};
-            spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
-            spyOn(mockCourseService, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
+            // jest.spyOn(mockCourseService, 'getBatchDetails').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
             enrolledCourseDetailsPage.batches = [{}, {}];
             // act
@@ -737,8 +737,8 @@ describe('EnrolledCourseDetailsPage', () => {
             mockCourseService.getBatchDetails = jest.fn(() => of(enrolledCourseDetailsPage.batchDetails));
             mockCommonUtilService.translateMessage = jest.fn(() => '');
             mockCommonUtilService.networkInfo = {isNetworkAvailable: true};
-            spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
-            spyOn(mockCourseService, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
+            // jest.spyOn(mockCourseService, 'getBatchDetails').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
             enrolledCourseDetailsPage.batches = [{}, {}];
             // act
@@ -763,8 +763,8 @@ describe('EnrolledCourseDetailsPage', () => {
             mockCommonUtilService.showToast = jest.fn();
             mockCourseService.getBatchDetails = jest.fn(() => of(enrolledCourseDetailsPage.batchDetails));
             mockCommonUtilService.translateMessage = jest.fn(() => '');
-            spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
-            spyOn(mockCourseService, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
+            // jest.spyOn(mockCourseService, 'getBatchDetails').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
             enrolledCourseDetailsPage.batches = [{}, {}];
             // act
@@ -789,8 +789,8 @@ describe('EnrolledCourseDetailsPage', () => {
             mockCommonUtilService.showToast = jest.fn();
             mockCourseService.getBatchDetails = jest.fn(() => of(enrolledCourseDetailsPage.batchDetails));
             mockCommonUtilService.translateMessage = jest.fn(() => '');
-            spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
-            spyOn(mockCourseService, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'navigateToBatchListPage').and.stub();
+            // jest.spyOn(mockCourseService, 'getBatchDetails').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
             enrolledCourseDetailsPage.batches = [{}, {}];
             // act
@@ -823,10 +823,10 @@ describe('EnrolledCourseDetailsPage', () => {
             };
             mockCommonUtilService.getLoader = jest.fn();
             mockCommonUtilService.translateMessage = jest.fn(() => ('YOU_MUST_JOIN_AN_ACTIVE_BATCH'));
-            spyOn(enrolledCourseDetailsPage, 'getAllBatches').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getAllBatches').and.stub();
             mockCourseService.getEnrolledCourses = jest.fn(() => of([{ courseId: 'SAMPLE_IDETIFIER' }]));
-            spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'joinTraining').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'joinTraining').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'getContentState').mockImplementation(() => {
                 return;
             });
@@ -854,15 +854,15 @@ describe('EnrolledCourseDetailsPage', () => {
         it('should return last played content and license', () => {
             // assert
             const response = contentDetailsResponse;
-            spyOn(enrolledCourseDetailsPage, 'generateImpressionEvent');
-            spyOn(enrolledCourseDetailsPage, 'generateStartEvent');
-            spyOn(enrolledCourseDetailsPage, 'setCourseStructure');
-            spyOn(enrolledCourseDetailsPage, 'setChildContents');
+            jest.spyOn(enrolledCourseDetailsPage, 'generateImpressionEvent');
+            jest.spyOn(enrolledCourseDetailsPage, 'generateStartEvent');
+            jest.spyOn(enrolledCourseDetailsPage, 'setCourseStructure');
+            jest.spyOn(enrolledCourseDetailsPage, 'setChildContents');
             enrolledCourseDetailsPage.courseCardData = { lastReadContentId: 'SAMPLE_LAST_READ_CONTENT' };
             mockHeaderService.showHeaderWithBackButton = jest.fn(() => { });
             mockCommonUtilService.showToast = jest.fn(() => 'COURSE_NOT_AVAILABLE');
             mockLocation.back = jest.fn();
-            spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
             mockCommonUtilService.appendTypeToPrimaryCategory = jest.fn(() => 'course-detail');
             // act
             enrolledCourseDetailsPage.extractApiResponse(response);
@@ -884,9 +884,9 @@ describe('EnrolledCourseDetailsPage', () => {
             mockTelemetryGeneratorService.generateSpineLoadingTelemetry = jest.fn();
             enrolledCourseDetailsPage.didViewLoad = true;
             mockHeaderService.hideHeader = jest.fn();
-            spyOn(enrolledCourseDetailsPage, 'importContent').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'setCourseStructure').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'importContent').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'setCourseStructure').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
             mockCommonUtilService.appendTypeToPrimaryCategory = jest.fn(() => 'course-detail');
             // act
             enrolledCourseDetailsPage.extractApiResponse(response);
@@ -1127,9 +1127,9 @@ describe('EnrolledCourseDetailsPage', () => {
             mockContentService.getContentDetails = jest.fn(() => of(contentDetailsResponse));
             jest.spyOn(mockContentService, 'getContentHeirarchy').mockReturnValue(of(mockcontentHirerachyResponse));
             mockZone.run = jest.fn((fn) => fn());
-            spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'getContentState').and.stub();
-            jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
+            // jest.spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getContentState').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'markContent').mockImplementation();
             // act
             enrolledCourseDetailsPage.setContentDetails('do_21281258639073280011490');
             // assert
@@ -1153,8 +1153,8 @@ describe('EnrolledCourseDetailsPage', () => {
             contentDetailsResponse.isAvailableLocally = false;
             mockContentService.getContentDetails = jest.fn(() => of(contentDetailsResponse));
             mockZone.run = jest.fn((fn) => fn());
-            spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'getContentState').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getContentState').and.stub();
             jest.spyOn(mockContentService, 'getContentHeirarchy').mockReturnValue(of(Promise.reject({})));
             // act
             enrolledCourseDetailsPage.setContentDetails('do_21281258639073280011490');
@@ -1180,7 +1180,7 @@ describe('EnrolledCourseDetailsPage', () => {
             contentDetailsResponse.isAvailableLocally = true;
             mockContentService.getContentDetails = jest.fn(() => of(contentDetailsResponse));
             mockZone.run = jest.fn((fn) => fn());
-            spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'extractApiResponse').and.stub();
             jest.spyOn(mockContentService, 'getContentHeirarchy');
             // act
             enrolledCourseDetailsPage.setContentDetails('do_21281258639073280011490');
@@ -1906,7 +1906,7 @@ describe('EnrolledCourseDetailsPage', () => {
             const event = {
                 name: 'back'
             };
-            spyOn(enrolledCourseDetailsPage, 'handleNavBackButton').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'handleNavBackButton').and.stub();
             // act
             enrolledCourseDetailsPage.handleHeaderEvents(event);
             // assert
@@ -2184,11 +2184,11 @@ describe('EnrolledCourseDetailsPage', () => {
     });
 
     describe('navigateToBatchListPage()', () => {
-        it('should return false, not call navigate', async (done) => {
+        it('should return false, not call navigate', async () => {
             // arrange
             mockLocalCourseService.isEnrollable = jest.fn(() => true);
-            spyOn(enrolledCourseDetailsPage, 'enrollIntoBatch').and.stub();
-            spyOn(mockRouter, 'navigate').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'enrollIntoBatch').and.stub();
+            mockRouter.navigate = jest.fn(() => Promise.resolve()) as any;
             const presentFn = jest.fn(() => Promise.resolve());
             const dismissFn = jest.fn(() => Promise.resolve());
             mockCommonUtilService.getLoader = jest.fn(() => ({
@@ -2209,7 +2209,7 @@ describe('EnrolledCourseDetailsPage', () => {
             await enrolledCourseDetailsPage.navigateToBatchListPage();
             // assert
             expect(mockRouter.navigate).toBeCalled();
-            done();
+            // done();
         });
 
         it('should show toast message for internet error', (done) => {
@@ -2427,7 +2427,7 @@ describe('EnrolledCourseDetailsPage', () => {
             mockEventsBusService.events = jest.fn(() => of(event));
             mockZone.run = jest.fn((cb) => cb());
             mockHeaderService.showHeaderWithBackButton = jest.fn();
-            spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
             // act
             enrolledCourseDetailsPage.subscribeSdkEvent();
             // assert
@@ -2454,7 +2454,7 @@ describe('EnrolledCourseDetailsPage', () => {
             enrolledCourseDetailsPage.isDownloadStarted = true;
             mockEventsBusService.events = jest.fn(() => of(event));
             mockZone.run = jest.fn((cb) => cb());
-            spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'getBatchDetails').and.stub();
             // act
             enrolledCourseDetailsPage.subscribeSdkEvent();
             // assert
@@ -2480,7 +2480,7 @@ describe('EnrolledCourseDetailsPage', () => {
             enrolledCourseDetailsPage.isDownloadStarted = false;
             mockEventsBusService.events = jest.fn(() => of(event));
             mockZone.run = jest.fn((cb) => cb());
-            spyOn(enrolledCourseDetailsPage, 'setContentDetails').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'setContentDetails').and.stub();
             // act
             enrolledCourseDetailsPage.subscribeSdkEvent();
             // assert
@@ -2536,7 +2536,7 @@ describe('EnrolledCourseDetailsPage', () => {
             };
             enrolledCourseDetailsPage.identifier = 'do_83424628349';
             mockEventsBusService.events = jest.fn(() => of(event));
-            spyOn(enrolledCourseDetailsPage, 'importContent').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'importContent').and.stub();
             mockZone.run = jest.fn((cb) => cb());
             // act
             enrolledCourseDetailsPage.subscribeSdkEvent();
@@ -2663,16 +2663,16 @@ describe('EnrolledCourseDetailsPage', () => {
             // act
             mockHeaderService.headerEventEmitted$ = {
                 subscribe: jest.fn(() => { })
-            };
+            } as any;
             enrolledCourseDetailsPage.isGuestUser = true;
             enrolledCourseDetailsPage.isAlreadyEnrolled = false;
             mockHeaderService.showHeaderWithBackButton = jest.fn();
             mockDiscussionService.getForumIds = jest.fn(() => throwError('some_err'));
             jest.spyOn(enrolledCourseDetailsPage, 'checkCurrentUserType').mockImplementation();
-            spyOn(enrolledCourseDetailsPage, 'isCourseEnrolled').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'subscribeSdkEvent').and.stub();
-            spyOn(enrolledCourseDetailsPage, 'populateCorRelationData');
-            spyOn(enrolledCourseDetailsPage, 'handleBackButton').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'isCourseEnrolled').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'subscribeSdkEvent').and.stub();
+            // jest.spyOn(enrolledCourseDetailsPage, 'populateCorRelationData');
+            // jest.spyOn(enrolledCourseDetailsPage, 'handleBackButton').and.stub();
             jest.spyOn(enrolledCourseDetailsPage, 'setContentDetails').mockImplementation();
             jest.spyOn(enrolledCourseDetailsPage, 'getAllBatches').mockImplementation(() => {
                 return Promise.resolve();

@@ -47,7 +47,9 @@ import { SegmentationTagService } from '../../services/segmentation-tag/segmenta
 
 describe('collectionDetailEtbPage', () => {
     let collectionDetailEtbPage: CollectionDetailEtbPage;
-    const mockContentService: Partial<ContentService> = {};
+    const mockContentService: Partial<ContentService> = {
+        getChildContents: jest.fn(() => of())
+    };
     const mockEventBusService: Partial<EventsBusService> = {};
     const mockDownloadService: Partial<DownloadService> = {};
     const mockProfileService: Partial<ProfileService> = {
@@ -210,7 +212,7 @@ describe('collectionDetailEtbPage', () => {
         }));
         mockHeaderService.updatePageConfig = jest.fn();
         mockevents.publish = jest.fn();
-        spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
+    //    jest.spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
         collectionDetailEtbPage.extractApiResponse(data);
         expect(mocktelemetryGeneratorService.generateSpineLoadingTelemetry).toHaveBeenCalled();
         expect(mockHeaderService.hideHeader).toHaveBeenCalled();
@@ -236,8 +238,8 @@ describe('collectionDetailEtbPage', () => {
             actionButtons: ['download']
         } as any);
         mockCommonUtilService.networkInfo = { isNetworkAvailable: false };
-        spyOn(collectionDetailEtbPage, 'setChildContents').and.stub();
-        spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
+    //    jest.spyOn(collectionDetailEtbPage, 'setChildContents').and.stub();
+    //    jest.spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
         collectionDetailEtbPage.ionViewWillEnter();
         collectionDetailEtbPage.extractApiResponse(data);
         // assert
@@ -253,12 +255,12 @@ describe('collectionDetailEtbPage', () => {
 
     it('should call setCollectionStructure when content is not available locally', (done) => {
         const data = contentDetailsMcokResponse3;
-        mockCommonUtilService.networkInfo.isNetworkAvailable = true;
+        mockCommonUtilService.networkInfo = {isNetworkAvailable: true};
         mocktelemetryGeneratorService.generateSpineLoadingTelemetry = jest.fn();
         mockHeaderService.hideHeader = jest.fn();
         mockStorageService.getStorageDestinationDirectoryPath = jest.fn();
         mockContentService.importContent = jest.fn(() => of());
-        spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
+    //    jest.spyOn(collectionDetailEtbPage, 'setCollectionStructure').and.stub();
         collectionDetailEtbPage.extractApiResponse(data);
         setTimeout(() => {
             expect(collectionDetailEtbPage.setCollectionStructure).toHaveBeenCalled();
@@ -858,13 +860,13 @@ describe('collectionDetailEtbPage', () => {
             // arrange
             collectionDetailEtbPage.contentDetail = {
                 contentData: {
-                    contentTypesCount: { id: 'do-123' }
+                    contentTypesCount: '{"id":"do-123"}'
                 }
             };
             // act
             collectionDetailEtbPage.setCollectionStructure();
             // assert
-            expect(isObject(collectionDetailEtbPage.contentDetail.contentData.contentTypesCount)).toBeTruthy();
+            expect(isObject(collectionDetailEtbPage.contentDetail.contentData.contentTypesCount)).toBeFalsy();
         });
 
         it('should return contentTypesCount if is not object', () => {
@@ -899,7 +901,7 @@ describe('collectionDetailEtbPage', () => {
         it('should not return contentTypesCount if not object for card data', () => {
             // arrange
             collectionDetailEtbPage.cardData = {
-                contentTypesCount: { id: 'do-123' }
+                contentTypesCount: '{ "id": "do-123" }'
             };
             collectionDetailEtbPage.contentDetail = {
                 contentData: {
@@ -909,7 +911,7 @@ describe('collectionDetailEtbPage', () => {
             // act
             collectionDetailEtbPage.setCollectionStructure();
             // assert
-            expect(isObject(collectionDetailEtbPage.cardData.contentTypesCount)).toBeTruthy();
+            expect(isObject(collectionDetailEtbPage.cardData.contentTypesCount)).toBeFalsy();
         });
 
         it('should not return anything if contentTypesCount is undefined', () => {

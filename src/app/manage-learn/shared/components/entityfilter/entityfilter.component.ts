@@ -13,7 +13,7 @@ import { IonInfiniteScroll, ModalController, NavParams } from '@ionic/angular';
 })
 export class EntityfilterComponent implements OnInit {
   @ViewChild('selectStateRef', { static: true }) selectStateRef;
-  @ViewChild(IonInfiniteScroll, { static: true }) infiniteScroll: IonInfiniteScroll;
+  @ViewChild('IonInfiniteScroll', { static: true }) infiniteScroll: IonInfiniteScroll;
   entityList;
   observationId;
   searchUrl;

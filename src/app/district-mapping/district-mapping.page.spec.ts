@@ -169,9 +169,9 @@ describe('DistrictMappingPage', () => {
     });
 
     it('should unsubscribe backButton', () => {
-        beforeEach(() => {
+        // beforeEach(() => {
             window.history.pushState({ isShowBackButton: true }, '', '');
-        });
+        // });
         districtMappingPage.ionViewWillLeave();
     });
 

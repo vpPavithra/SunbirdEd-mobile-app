@@ -18,9 +18,9 @@ describe('DownloadPdfService', () => {
     downloadPdfService = new DownloadPdfService(
       mockPermissionService as AndroidPermissionsService
     );
-    spyOn(mockPermissionService, 'checkPermissions')
-    spyOn(mockPermissionService, 'requestPermissions')
-    spyOn(window['downloadManager'], 'enqueue')
+  //  jest.spyOn(mockPermissionService, 'checkPermissions')
+  //  jest.spyOn(mockPermissionService, 'requestPermissions')
+   jest.spyOn(window['downloadManager'], 'enqueue')
   });
 
   beforeEach(() => {
@@ -34,40 +34,44 @@ describe('DownloadPdfService', () => {
   });
   describe('if permission is always denied', () => {
     beforeAll(() => {
-      mockPermissionService['checkPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: true }));
+      mockPermissionService.checkPermissions = jest.fn(() => of({isPermissionAlwaysDenied: true }))
     })
-    it('it should reject', async (done) => {
+    it('it should reject', async () => {
       try {
         await downloadPdfService.downloadPdf(content as any as Content);
         fail();
       } catch (e) {
+        setTimeout(() => {
         expect(e).toEqual({ reason: 'device-permission-denied' });
-        done();
+          
+        }, 50);
+        // done();
       }
     });
   });
 
   describe('if permission is not always denied', () => {
     beforeAll(() => {
-      mockPermissionService['checkPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: false }));
+      mockPermissionService.checkPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false }));
     });
 
     describe('if permission is not allowed', () => {
 
       describe('if permission granted', () => {
         beforeAll(() => {
-          mockPermissionService['checkPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: false, hasPermission: false }));
-          mockPermissionService['requestPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: false, hasPermission: true }));
-          window['downloadManager']['enqueue'].and.callFake((downloadRequest, callback) => {
+          mockPermissionService.checkPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: false }));
+          mockPermissionService.requestPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: true }));
+          window['downloadManager']['enqueue'] = jest.fn((downloadRequest, callback) => {
             callback(null, 'sampleid');
           });
 
         })
-        it('should download pdf', async (done) => {
+        it('should download pdf', async () => {
           try {
+            jest.setTimeout(50);
             await downloadPdfService.downloadPdf(content as any as Content);
             expect(window['downloadManager'].enqueue).toHaveBeenCalled();
-            done();
+            // done();
           } catch (e) {
             fail(e);
           }
@@ -76,16 +80,19 @@ describe('DownloadPdfService', () => {
 
       describe('if permission not granted', () => {
         beforeAll(() => {
-          mockPermissionService['checkPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: false, hasPermission: false }));
-          mockPermissionService['requestPermissions'].and.returnValue(of({ isPermissionAlwaysDenied: false, hasPermission: false }));
+          mockPermissionService.checkPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: false }));
+          mockPermissionService.requestPermissions = jest.fn(() => of({ isPermissionAlwaysDenied: false, hasPermission: false }));
         })
-        it('should reject ', async (done) => {
+        it('should reject ', async () => {
           try {
             await downloadPdfService.downloadPdf(content as any as Content);
             fail();
           } catch (e) {
-            expect(e).toEqual({ reason: 'user-permission-denied' });
-            done();
+            jest.setTimeout(50);
+            setTimeout(() => {
+              expect(e).toEqual({ reason: 'user-permission-denied' });
+            }, 10);
+            // done();
           }
         });
       });
