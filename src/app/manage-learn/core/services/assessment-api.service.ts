@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Inject } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { ToastService } from '.';
+import { ToastService } from './toast/toast.service';
 import { urlConstants } from '../constants/urlConstants';
 import { ApiService } from './api.service';
 import { AuthService, DeviceInfo,SharedPreferences } from 'sunbird-sdk';

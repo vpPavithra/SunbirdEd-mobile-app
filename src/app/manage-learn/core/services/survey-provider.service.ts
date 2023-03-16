@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
 import { rejects } from 'assert';
-import { LoaderService, LocalStorageService, UtilsService } from '..';
+import { LoaderService } from '../services/loader/loader.service';
+import { LocalStorageService } from '../services/local-storage/local-storage.service';
+import { UtilsService } from '../services/utils.service';
 import { urlConstants } from '../constants/urlConstants';
 import { AssessmentApiService } from './assessment-api.service';
 import { UpdateLocalSchoolDataService } from './update-local-school-data.service';
@@ -11,7 +13,7 @@ import { SurveyMsgComponent } from '../../shared/components/survey-msg/survey-ms
 import { storageKeys } from '../../storageKeys';
 import { DhitiApiService } from './dhiti-api.service';
 import * as moment from 'moment';
-import { CommonUtilService } from '@app/services';
+import { CommonUtilService } from '@app/services/common-util.service';
 
 @Injectable({
   providedIn: 'root',
