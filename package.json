@@ -182,7 +182,7 @@
     "@babel/preset-typescript": "^7.9.0",
     "@ionic/angular-toolkit": "^5.0.3",
     "@ionic/v4-migration-tslint": "^1.7.1",
-    "@project-sunbird/sb-themes": "0.0.82",
+    "@project-sunbird/sb-themes": "0.0.86",
     "@project-sunbird/telemetry-sdk": "0.0.29",
     "@types/jest": "^29.4.0",
     "@types/node": "^14.18.36",
