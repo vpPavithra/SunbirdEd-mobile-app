@@ -36,7 +36,7 @@ import {
 } from './collection-detail-etb-page.spec.data';
 import { of, Subscription, throwError } from 'rxjs';
 import { ContentPlayerHandler } from '../../services/content/player/content-player-handler';
-import { EventTopics } from '../../app/app.constant';
+import { EventTopics } from '../app.constant';
 import { ShareItemType} from '../app.constant';
 import { ContentDeleteHandler } from '../../services/content/content-delete-handler';
 import { isObject } from 'util';

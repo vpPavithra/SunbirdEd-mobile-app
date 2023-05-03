@@ -1,4 +1,4 @@
-import { CategoryListPage } from '../category-list/category-list-page';
+import { CategoryListPage } from './category-list-page';
 import { CommonUtilService } from '../../services/common-util.service';
 import { Router } from '@angular/router';
 import { AppHeaderService } from '../../services/app-header.service';

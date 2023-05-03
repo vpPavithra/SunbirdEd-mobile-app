@@ -1,4 +1,4 @@
-import {ResourcesComponent} from '../../app/resources/resources.component';
+import {ResourcesComponent} from './resources.component';
 import {
     ContentEventType,
     ContentSearchCriteria,
@@ -39,7 +39,7 @@ import {Network} from '@awesome-cordova-plugins/network/ngx';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 import {SplaschreenDeeplinkActionHandlerDelegate} from '../../services/sunbird-splashscreen/splaschreen-deeplink-action-handler-delegate';
-import {mockContentData} from '../../app/content-details/content-details.page.spec.data';
+import {mockContentData} from '../content-details/content-details.page.spec.data';
 import {NEVER, of, Subscription} from 'rxjs';
 import {ContentFilterConfig, EventTopics, PreferenceKey, PrimaryCategory, RouterLinks, ViewMore} from '../app.constant';
 import {CorReleationDataType, ImpressionType} from '../../services/telemetry-constants';
