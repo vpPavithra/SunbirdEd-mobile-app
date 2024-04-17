@@ -6,6 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import {GooglePlus} from '@awesome-cordova-plugins/google-plus/ngx';
+// import { Camera } from '@capacitor/camera'; 
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { Chooser } from '@ionic-native/chooser/ngx';
+
+// import { Chooser } from "@awesome-cordova-plugins/chooser/ngx";
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { FilePath } from '@ionic-native/file-path/ngx';
 // ionic cordova dependencies/plugins
 // import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 // import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
@@ -79,8 +87,8 @@ import { PageFilterPageModule } from './page-filter/page-filter.module';
 import { TermsAndConditionsPageModule } from './terms-and-conditions/terms-and-conditions.module';
 import { TextbookTocService } from '../app/collection-detail-etb/textbook-toc-service';
 import {AliasBoardName} from '../pipes/alias-board-name/alias-board-name';
-// import {configuration} from '../configuration/configuration';
-// import { CoreModule } from './manage-learn/core/core.module';
+import {configuration} from '../configuration/configuration';
+import { CoreModule } from './manage-learn/core/core.module';
 import { UserTypeSelectionPageModule } from './user-type-selection/user-type-selection.module';
 import { SbSearchFilterModule } from 'common-form-elements';
 import { TranslateJsonPipe } from '../pipes/translate-json/translate-json';
@@ -502,10 +510,14 @@ declare const sbutility;
         PageFilterOptionsPageModule,
         TermsAndConditionsPageModule,
         IonicStorageModule.forRoot(),
-        // CoreModule,
+        CoreModule,
         SbSearchFilterModule.forRoot('mobile'),
     ],
     providers: [
+      {
+        provide: Camera,
+        useFactory: () => Camera,
+      },
         File,
         FileTransferObject,
         FileTransfer,
@@ -556,9 +568,9 @@ declare const sbutility;
         ...sunbirdSdkServicesProvidersFactory(),
         { provide: ErrorHandler, useClass: CrashAnalyticsErrorLogger },
         { provide: APP_INITIALIZER, useFactory: sunbirdSdkFactory, deps: [], multi: true },
-        // Camera,
-        // FilePath,
-        // Chooser,
+        FilePath,
+        FileChooser,
+        Chooser,
         // PhotoViewer,
         // StreamingMedia,
         QumlPlayerService,
