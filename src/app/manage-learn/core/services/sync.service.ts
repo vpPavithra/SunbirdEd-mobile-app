@@ -89,18 +89,18 @@ export class SyncService {
       payload: obj
     }
     return new Promise((resolve, reject) => {
-      // this.unnatiServ.post(config).subscribe(success => {
-      //   showLoader ? this.loader.stopLoader() : null;
-      //   resolve(success)
-      // }, error => {
-      //   showLoader ? this.loader.stopLoader() : null;
-      //   reject(error);
-      // })
+      this.unnatiServ.post(config).subscribe(success => {
+        showLoader ? this.loader.stopLoader() : null;
+        resolve(success)
+      }, error => {
+        showLoader ? this.loader.stopLoader() : null;
+        reject(error);
+      })
     })
   }
 
 
-  async createNewProject(showLoader: boolean = false, projectDetails = {}): Promise<any> {
+  createNewProject(showLoader: boolean = false, projectDetails = {}): Promise<any> {
     if(showLoader){
       this.loader.startLoader()
     }
@@ -115,12 +115,19 @@ export class SyncService {
       url: urlConstants.API_URLS.CREATE_PROJECT,
       payload: actualPayload
     }
-     let success  = await this.unnatiServ.post(config)
+    return new Promise((resolve, reject) => {
+      this.unnatiServ.post(config).subscribe(success => {
         if(showLoader){
           this.loader.stopLoader()
         }
-        console.log(success,"success")
-        return(success)
+        resolve(success)
+      }, error => {
+        if(showLoader){
+          this.loader.stopLoader()
+        }
+        reject(error);
+      })
+    })
   }
 
   removeKeys(doc, fields) {
@@ -151,13 +158,13 @@ export class SyncService {
         url: urlConstants.API_URLS.PRESIGNED_URLS,
         payload: payload,
       };
-      // this.kendra.post(config).subscribe(success => {
-      //   resolve(success.result[projects._id].files)
-      //   console.log(success);
-      // }, error => {
-      //   reject(error);
-      //   console.log(error)
-      // })
+      this.kendra.post(config).subscribe(success => {
+        resolve(success.result[projects._id].files)
+        console.log(success);
+      }, error => {
+        reject(error);
+        console.log(error)
+      })
     })
   }
 

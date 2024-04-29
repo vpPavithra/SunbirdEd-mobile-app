@@ -49,7 +49,7 @@ export class AddEntityComponent implements OnInit {
       this.page = 1;
       this.getEntities(subEntity.detail.value);
    }
-   async getEntities(entityType) {
+   getEntities(entityType) {
       if (this.networkService.isNetworkAvailable) {
          const config = {
             url:
@@ -64,7 +64,8 @@ export class AddEntityComponent implements OnInit {
                "&limit=" +
                this.limit,
          };
-         let data:any = await this.kendraApiService.get(config);
+         this.kendraApiService.get(config).subscribe(
+            (data) => {
                if (data.result.data && data.result.data.length) {
                   this.entities = this.entities.concat(data.result.data);
                   this.entityCount = data.result.count;
@@ -72,6 +73,10 @@ export class AddEntityComponent implements OnInit {
                } else {
                   this.noSubEntity = true;
                }
+            },
+            (error) => {
+            }
+         );
       } else {
          this.toast.showMessage("FRMELEMNTS_MSG_YOU_ARE_WORKING_OFFLINE_TRY_AGAIN", "danger");
       }
@@ -90,7 +95,7 @@ export class AddEntityComponent implements OnInit {
       this.page++;
       this.getEntities(this.childEntity);
    }
-   async getSubEntities(stateId) {
+   getSubEntities(stateId) {
       // to select entityType if already provided
       if (this.entityType) {
          let selist = [];
@@ -110,7 +115,8 @@ export class AddEntityComponent implements OnInit {
          const config = {
             url:urlConstants.API_URLS.GET_SUB_ENITIES_FOR_ROLES+stateId+`?role=${this.profileData.role}`
          };
-         let data:any = await this.kendraApiService.get(config);
+         this.kendraApiService.get(config).subscribe(
+            (data) => {
                if (data.result) {
                   let selist = [];
                   data.result.forEach((se) => {
@@ -124,6 +130,10 @@ export class AddEntityComponent implements OnInit {
                   this.childEntity = this.subEntities[0].value;
                   this.getEntities(this.subEntities[0].value);
                }
+            },
+            (error) => {
+            }
+         );
       } else {
          this.toast.showMessage("FRMELEMNTS_MSG_YOU_ARE_WORKING_OFFLINE_TRY_AGAIN", "danger");
       }

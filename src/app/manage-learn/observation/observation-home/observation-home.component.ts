@@ -77,20 +77,20 @@ export class ObservationHomeComponent implements OnInit {
           `?type=observation&page=${this.page}&limit=${this.limit}&search=${encodeURIComponent(this.searchText)}`,
         payload: payload
       };
-      // this.kendra.post(config).subscribe(
-      //   success => {
-      //     this.loader.stopLoader();
-      //     if (success && success.result && success.result.data) {
-      //       this.count = success.result.count;
-      //       this.solutionList = [...this.solutionList, ...success.result.data];
-      //       this.storage.setLocalStorage(this.generatedKey, this.solutionList);
-      //     }
-      //   },
-      //   error => {
-      //     this.solutionList = [];
-      //     this.loader.stopLoader();
-      //   }
-      // );
+      this.kendra.post(config).subscribe(
+        success => {
+          this.loader.stopLoader();
+          if (success && success.result && success.result.data) {
+            this.count = success.result.count;
+            this.solutionList = [...this.solutionList, ...success.result.data];
+            this.storage.setLocalStorage(this.generatedKey, this.solutionList);
+          }
+        },
+        error => {
+          this.solutionList = [];
+          this.loader.stopLoader();
+        }
+      );
     }
   }
 

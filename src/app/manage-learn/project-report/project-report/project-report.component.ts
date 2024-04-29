@@ -111,7 +111,8 @@ export class ProjectReportComponent {
         url: url,
         payload: payload,
       };
-      let data:any = await this.unnatiService.post(config)
+      this.unnatiService.post(config).subscribe(
+        (data) => {
           if (data.result && !data.result.dataAvailable) {
             this.presentAlert(
               this.texts['FRMELEMNTS_MSG_NO_DATA_AVAILABLE'],
@@ -128,6 +129,9 @@ export class ProjectReportComponent {
 
           this.reportData.categories.series = this.generateCircleData(this.reportData.categories, 50);
           this.reportData.categories.series_new = this.generateCircleData_new(this.reportData.categories, 50);
+        },
+        (err) => {}
+      );
     } else {
     }
   }

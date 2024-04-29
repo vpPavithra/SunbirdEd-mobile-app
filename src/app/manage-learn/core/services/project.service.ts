@@ -57,13 +57,13 @@ export class ProjectService {
       url: urlConstants.API_URLS.TEMPLATE_DETAILS + id,
       payload: payload,
     };
-    return this.kendra.post(config);
+    return this.kendra.post(config).toPromise();
   }
   async getTemplateByExternalId(id, extraParams?) {
     const config = {
       url: urlConstants.API_URLS.PROJECT_TEMPLATE_DETAILS + encodeURIComponent(id) + (extraParams ? extraParams : ''),
     }
-    return this.unnatiService.post(config);
+    return this.unnatiService.post(config).toPromise();
   }
 
   getTemplateData(payload, id, targeted) {
@@ -71,7 +71,7 @@ export class ProjectService {
       url: urlConstants.API_URLS.IMPORT_LIBRARY_PROJECT + id + '?isATargetedSolution=' + targeted,
       payload: payload,
     };
-    return this.unnatiService.post(config);
+    return this.unnatiService.post(config).toPromise();
   }
 
   async getProjectDetails({ projectId = '', solutionId, isProfileInfoRequired = false,
@@ -89,7 +89,7 @@ export class ProjectService {
       url: urlConstants.API_URLS.GET_PROJECT + url,
       payload: detailsPayload ? detailsPayload : payload
     }
-   let success =  await this.kendra.post(config);
+    this.kendra.post(config).subscribe(success => {
       this.loader.stopLoader();
       success.result.hasAcceptedTAndC = hasAcceptedTAndC;
       let projectDetails = success.result;
@@ -135,6 +135,9 @@ export class ProjectService {
           this.navigateToProjectDetails(navObj);
         }
       })
+    }, error => {
+      this.loader.stopLoader();
+    })
   }
 
   navigateToProjectDetails({ projectId, programId, solutionId, replaceUrl }) {
@@ -209,46 +212,46 @@ export class ProjectService {
       url: urlConstants.API_URLS.START_ASSESSMENT + `${projectId}?taskId=${id}`,
       payload: payload
     };
-    // this.unnatiService.post(config).subscribe(async success => {
-    //   if (!success.result) {
-    //     this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
-    //     return;
-    //   }
-    //   let data = success.result;
-    //   if (!data?.observationId) {
-    //     const response  = await this.getTemplateBySoluntionId(data?.solutionDetails?._id);
-    //       const result = response.result;
-    //       if (
-    //         result.assessment.evidences.length > 1 ||
-    //         result.assessment.evidences[0].sections.length > 1 ||
-    //         (result.solution.criteriaLevelReport && result.solution.isRubricDriven)
-    //       ) {
-    //         this.router.navigate([RouterLinks.DOMAIN_ECM_LISTING], { state: result });
-    //       } else {
-    //         this.router.navigate([RouterLinks.QUESTIONNAIRE], {
-    //           queryParams: {
-    //             evidenceIndex: 0,
-    //             sectionIndex: 0,
-    //           },
-    //           state: result,
-    //         });
-    //       }
-    //       return;
-    //   }
+    this.unnatiService.post(config).subscribe(async success => {
+      if (!success.result) {
+        this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
+        return;
+      }
+      let data = success.result;
+      if (!data?.observationId) {
+        const response  = await this.getTemplateBySoluntionId(data?.solutionDetails?._id);
+          const result = response.result;
+          if (
+            result.assessment.evidences.length > 1 ||
+            result.assessment.evidences[0].sections.length > 1 ||
+            (result.solution.criteriaLevelReport && result.solution.isRubricDriven)
+          ) {
+            this.router.navigate([RouterLinks.DOMAIN_ECM_LISTING], { state: result });
+          } else {
+            this.router.navigate([RouterLinks.QUESTIONNAIRE], {
+              queryParams: {
+                evidenceIndex: 0,
+                sectionIndex: 0,
+              },
+              state: result,
+            });
+          }
+          return;
+      }
 
-    //   this.router.navigate([`/${RouterLinks.OBSERVATION}/${RouterLinks.OBSERVATION_SUBMISSION}`], {
-    //     queryParams: {
-    //       programId: data.programId,
-    //       solutionId: data.solutionId,
-    //       observationId: data.observationId,
-    //       entityId: data.entityId,
-    //       entityName: data.entityName,
-    //       programJoined: true
-    //     },
-    //   });
-    // }, (error) => {
-    //   this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
-    // })
+      this.router.navigate([`/${RouterLinks.OBSERVATION}/${RouterLinks.OBSERVATION_SUBMISSION}`], {
+        queryParams: {
+          programId: data.programId,
+          solutionId: data.solutionId,
+          observationId: data.observationId,
+          entityId: data.entityId,
+          entityName: data.entityName,
+          programJoined: true
+        },
+      });
+    }, (error) => {
+      this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
+    })
   }
 
   async checkReport(projectId, taskId) {
@@ -264,29 +267,29 @@ export class ProjectService {
       payload: payload
 
     };
-    // this.unnatiService.get(config).subscribe(
-    //   (success) => {
-    //     if (!success.result) {
-    //       this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
-    //       return;
-    //     }
-    //     let data = success.result;
+    this.unnatiService.get(config).subscribe(
+      (success) => {
+        if (!success.result) {
+          this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
+          return;
+        }
+        let data = success.result;
 
-    //     this.router.navigate([`/${RouterLinks.OBSERVATION}/${RouterLinks.OBSERVATION_SUBMISSION}`], {
-    //       queryParams: {
-    //         programId: data.programId,
-    //         solutionId: data.solutionId,
-    //         observationId: data.observationId,
-    //         entityId: data.entityId,
-    //         entityName: data.entityName,
-    //       },
-    //     });
+        this.router.navigate([`/${RouterLinks.OBSERVATION}/${RouterLinks.OBSERVATION_SUBMISSION}`], {
+          queryParams: {
+            programId: data.programId,
+            solutionId: data.solutionId,
+            observationId: data.observationId,
+            entityId: data.entityId,
+            entityName: data.entityName,
+          },
+        });
 
-    //   },
-    //   (error) => {
-    //     this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
-    //   }
-    // );
+      },
+      (error) => {
+        this.toast.showMessage('FRMELEMNTS_MSG_CANNOT_GET_PROJECT_DETAILS', "danger");
+      }
+    );
   }
 
   async mapProjectToUser({ programId, solutionId, templateId, isATargetedSolution, hasAcceptedTAndC }) {
@@ -384,12 +387,8 @@ export class ProjectService {
   }
 
   createNewProject(project, isShare?) {
-    debugger
     this.loader.startLoader();
     const projectDetails = JSON.parse(JSON.stringify(project));
-
-    debugger
-
     this.syncService
       .createNewProject(true, projectDetails)
       .then((success) => {
@@ -426,7 +425,6 @@ export class ProjectService {
                     projectId: projectDetails._id,
                     programId: projectDetails.programId,
                     solutionId: projectDetails.solutionId,
-                    // fromImportPage: this.importProjectClicked
                   }, replaceUrl: true
                 });
               })

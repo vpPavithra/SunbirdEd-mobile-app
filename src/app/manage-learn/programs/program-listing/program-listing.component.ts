@@ -45,13 +45,17 @@ export class ProgramListingComponent implements OnInit {
                 url: urlConstants.API_URLS.PROGRAM_LISTING +false+ '&page=' + this.page + '&limit=' + this.limit + '&search=' + encodeURIComponent(this.search),
                 payload: payload
             }
-            let success = await this.kendraService.post(config)
+            this.kendraService.post(config).subscribe(success => {
                 this.loader.stopLoader();
                 if (success.result.data) {
                     this.programs = this.programs.concat(success.result.data);
                     this.count = success.result.count;
                     this.description = success.result.description;
                 }
+            }, error => {
+                this.loader.stopLoader();
+                this.programs = [];
+            })
         } else {
             this.loader.stopLoader();
         }

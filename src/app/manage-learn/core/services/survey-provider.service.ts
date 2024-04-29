@@ -31,22 +31,7 @@ export class SurveyProviderService {
     private commonUtilService: CommonUtilService
   ) {}
 
-  // get all list
-  // getSurveyListing(): Promise<any> {
-  //   const url = AppConfigs.surveyFeedback.surveyListing;
-  //   return new Promise((resolve, reject) => {
-  //     this.apiProvider.httpGet(
-  //       url,
-  //       (success) => {
-  //         resolve(success.result);
-  //       },
-  //       (err) => {
-  //         reject(err);
-  //       }
-  //     );
-  //   });
-  // }
-
+  
   // pass the link which is present in deeplink(deeplink last param)
   async getDetailsByLink(link): Promise<any> {
     let payload = await this.utils.getProfileInfo();
@@ -56,14 +41,14 @@ export class SurveyProviderService {
     };
 
     return new Promise((resolve, reject) => {
-      // this.assessmentService.post(config).subscribe(
-      //   (success) => {
-      //     resolve(success);
-      //   },
-      //   (error) => {
-      //     rejects(error);
-      //   }
-      // );
+      this.assessmentService.post(config).subscribe(
+        (success) => {
+          resolve(success);
+        },
+        (error) => {
+          rejects(error);
+        }
+      );
     });
   }
 
@@ -80,14 +65,14 @@ export class SurveyProviderService {
     };
 
     return new Promise((resolve, reject) => {
-      // this.assessmentService.post(config).subscribe(
-      //   (success) => {
-      //     resolve(success);
-      //   },
-      //   (error) => {
-      //     rejects(error);
-      //   }
-      // );
+      this.assessmentService.post(config).subscribe(
+        (success) => {
+          resolve(success);
+        },
+        (error) => {
+          rejects(error);
+        }
+      );
     });
   }
 
@@ -132,17 +117,17 @@ export class SurveyProviderService {
       payload: payload,
     };
     return new Promise((resolve, reject) => {
-      // this.dhiti.post(config).subscribe(
-      //   (success) => {
-      //     this.loader.stopLoader();
-      //     resolve(success);
-      //   },
-      //   (error) => {
-      //     this.toast.create(error.message);
-      //     this.loader.stopLoader();
-      //     reject();
-      //   }
-      // );
+      this.dhiti.post(config).subscribe(
+        (success) => {
+          this.loader.stopLoader();
+          resolve(success);
+        },
+        (error) => {
+          this.toast.create(error.message);
+          this.loader.stopLoader();
+          reject();
+        }
+      );
     });
   }
 

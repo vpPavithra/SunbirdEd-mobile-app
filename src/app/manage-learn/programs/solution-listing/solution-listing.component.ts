@@ -124,7 +124,6 @@ export class SolutionListingComponent {
       .getDetailsById(surveyId, data._id)
       .then((res) => {
         if (res.result && res.result.status == 'completed') {
-          // this.toast.openToast(res.message)
           this.surveyProvider.showMsg('surveyCompleted');
           return;
         }
@@ -149,7 +148,6 @@ export class SolutionListingComponent {
         evidenceIndex: 0,
         sectionIndex: 0,
         isSurvey:true
-        // schoolName: 'sample',
       },
     });
   }
@@ -213,7 +211,8 @@ export class SolutionListingComponent {
           '&search=',
         payload: payload,
       };
-      let success = await this.kendraService.post(config);
+      this.kendraService.post(config).subscribe(
+        (success) => {
           this.loader.stopLoader();
           if (success.result.data) {
             this.solutions = this.solutions.concat(success.result.data);
@@ -221,6 +220,12 @@ export class SolutionListingComponent {
             this.description = success.result.description;
             this.programName = success.result.programName;
           }
+        },
+        (error) => {
+          this.loader.stopLoader();
+          this.solutions = [];
+        }
+      );
     } else {
       this.loader.stopLoader();
     }

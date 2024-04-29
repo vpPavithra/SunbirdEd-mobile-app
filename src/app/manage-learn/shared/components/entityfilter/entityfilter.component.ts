@@ -62,15 +62,15 @@ export class EntityfilterComponent implements OnInit {
     this.payload = await this.utils.getProfileInfo();
     const config = {
       url: urlConstants.API_URLS.TARGETTED_ENTITY_TYPES + this.solutionId,
-      payload: this.payload, 
+      payload: this.payload,
     };
 
-    // this.kendra.post(config).subscribe(success => {
-    //   this.entityType = success.result ? success.result._id : null;
-    //   this.search();
-    // }, error => {
+    this.kendra.post(config).subscribe(success => {
+      this.entityType = success.result ? success.result._id : null;
+      this.search();
+    }, error => {
 
-    // })
+    })
   }
 
   openSelect() {
@@ -129,7 +129,6 @@ export class EntityfilterComponent implements OnInit {
       apiUrl +
       `&parentEntityId=${encodeURIComponent(
         this.entityType
-        // this.isProfileAssignedWithState ? this.profileMappedState : this.selectedState
       )}`;
     this.loading = true;
 
@@ -137,43 +136,43 @@ export class EntityfilterComponent implements OnInit {
       url: apiUrl,
       payload: payload,
     };
-    // this.assessmentService.post(config).subscribe(
-    //   (success) => {
-    //     this.loading = false;
-    //     this.selectableList = !event ? [] : this.selectableList;
-    //     for (let i = 0; i < success.result[0].data.length; i++) {
-    //       success.result[0].data[i].isSelected = success.result[0].data[i].selected;
-    //       success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
-    //     }
-    //     this.totalCount = success.result[0].count;
-    //     if (this.selectedItems.length) {
-    //       if (!event) {
-    //         if (this.searchQuery === "") {
-    //           this.selectableList = [...this.selectedItems, ...success.result[0].data];
-    //         } else {
-    //           this.selectableList = [...this.selectableList, ...success.result[0].data];
-    //         }
-    //       } else {
-    //         this.selectableList.forEach((element) => {
-    //           this.selectedItems.forEach((item) => {
-    //             if (element._id === item._id) {
-    //               let indexToReplace = this.selectableList.indexOf(element);
-    //               this.selectableList.splice(indexToReplace, 1, item)
-    //             }
-    //           })
-    //         })
-    //         this.selectableList = [...this.selectableList, ...success.result[0].data];
-    //       }
-    //     } else {
-    //       this.selectableList = [...this.selectableList, ...success.result[0].data];
-    //     }
-    //     !event ? this.loader.stopLoader() : this.toggleInfiniteScroll(event);
-    //   },
-    //   (error) => {
-    //     this.loading = false;
-    //     !event ? this.loader.stopLoader() : this.toggleInfiniteScroll(event);
-    //   }
-    // );
+    this.assessmentService.post(config).subscribe(
+      (success) => {
+        this.loading = false;
+        this.selectableList = !event ? [] : this.selectableList;
+        for (let i = 0; i < success.result[0].data.length; i++) {
+          success.result[0].data[i].isSelected = success.result[0].data[i].selected;
+          success.result[0].data[i].preSelected = success.result[0].data[i].selected ? true : false;
+        }
+        this.totalCount = success.result[0].count;
+        if (this.selectedItems.length) {
+          if (!event) {
+            if (this.searchQuery === "") {
+              this.selectableList = [...this.selectedItems, ...success.result[0].data];
+            } else {
+              this.selectableList = [...this.selectableList, ...success.result[0].data];
+            }
+          } else {
+            this.selectableList.forEach((element) => {
+              this.selectedItems.forEach((item) => {
+                if (element._id === item._id) {
+                  let indexToReplace = this.selectableList.indexOf(element);
+                  this.selectableList.splice(indexToReplace, 1, item)
+                }
+              })
+            })
+            this.selectableList = [...this.selectableList, ...success.result[0].data];
+          }
+        } else {
+          this.selectableList = [...this.selectableList, ...success.result[0].data];
+        }
+        !event ? this.loader.stopLoader() : this.toggleInfiniteScroll(event);
+      },
+      (error) => {
+        this.loading = false;
+        !event ? this.loader.stopLoader() : this.toggleInfiniteScroll(event);
+      }
+    );
   }
 
   toggleInfiniteScroll(e) {

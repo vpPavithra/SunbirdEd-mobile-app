@@ -7,9 +7,7 @@ import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
-// import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { FileOpener,FileOpenerOptions } from '@capacitor-community/file-opener';
-// import { PhotoViewer } from '@awesome-cordova-plugins/photo-viewer/ngx';
 import { ActivatedRoute } from '@angular/router';
 import { statusType, ToastService, UtilsService } from '../../core';
 import * as _ from "underscore";
@@ -47,8 +45,6 @@ export class AttachmentListingPage implements OnInit {
     private headerService: AppHeaderService,
     private translate: TranslateService,
     public transfer: FileTransfer,
-    // public fileOpener: FileOpener,
-    // private photoViewer: PhotoViewer,
     private routeParam: ActivatedRoute,
     private util: UtilsService,
     private alert: AlertController,
@@ -176,27 +172,12 @@ export class AttachmentListingPage implements OnInit {
       this.openFile(attachment)
     })
   }
-  // openImage(attachment) {
-  //   const fileOpenerOptions: FileOpenerOptions = {
-  //     filePath: attachment,
-  //     contentType: 'application/pdf',
-  //   }
-  //   FileOpener.open({filePath: res.nativeURL,
-  //     contentType: 'application/pdf',})
-  //   this.photoViewer.show(attachment)
-
-  // }
   openFile(attachment) {
       const fileOpenerOptions: FileOpenerOptions = {
-      filePath: this.path + '/' + attachment.name,
+      filePath: this.path + '+' + attachment.name,
       contentType:  attachment.type,
     }
     FileOpener.open(fileOpenerOptions);
-    // this.fileOpener.open(this.path + '/' + attachment.name, attachment.type)
-    //   .then(() => { console.log('File is opened'); })
-    //   .catch(e => {
-    //     this.toast.showMessage(e.message,'danger');
-    //   });
   }
   async deleteConfirmation(attachment) {
     let data;

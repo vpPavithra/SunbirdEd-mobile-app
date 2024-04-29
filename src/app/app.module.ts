@@ -97,6 +97,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import { NetworkService } from './manage-learn/core';
 // AoT requires an exported function for factories
 export function translateHttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -585,7 +586,8 @@ declare const sbutility;
 export class AppModule {
   constructor(
     private platform: Platform,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private network : NetworkService 
     ) {
       this.intialiseApp();
       this.setDefaultLanguage();
@@ -594,6 +596,7 @@ export class AppModule {
     await this.platform.ready().then((src) => {
       console.log("******* platform ready ", src);
       SplashScreen.hide();
+      this.network.netWorkCheck();
     }).catch(err => {
       console.log("error on platform ready ");
     })

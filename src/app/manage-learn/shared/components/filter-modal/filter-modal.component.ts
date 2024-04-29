@@ -24,7 +24,6 @@ export class FilterModalComponent implements OnInit {
   count: any;
   constructor(
     private loader: LoaderService,
-    // public reportSrvc: ReportsService,
     public kendraSrvc: KendraApiService,
     public unnatiSrvc: UnnatiDataService,
     private modalCtrl: ModalController,
@@ -60,19 +59,18 @@ export class FilterModalComponent implements OnInit {
     const config = {
       url:
         urlConstants.API_URLS.GET_PROGRAM_BY_ENTITY +
-        // this.entityId +
         `?search=${encodeURIComponent(searchText)}&page=${this.page}&limit=${this.limit}`,
       payload: payload,
     };
-    // this.unnatiSrvc.post(config).subscribe(
-    //   (data) => {
-    //     this.loader.stopLoader();
-    //     this.dataList = this.dataList.concat(data.result.data);
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //   }
-    // );
+    this.unnatiSrvc.post(config).subscribe(
+      (data) => {
+        this.loader.stopLoader();
+        this.dataList = this.dataList.concat(data.result.data);
+      },
+      (error) => {
+        this.loader.stopLoader();
+      }
+    );
   }
   async serachEntity(searchText: any) {
 

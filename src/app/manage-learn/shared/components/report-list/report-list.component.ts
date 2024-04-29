@@ -23,10 +23,10 @@ completedDate;
   }
 
   loadData(){
-    // this.dhiti.post(this.config).subscribe(resp =>{
-    // this.completedDate = resp.completedDate;
-    // this.element.answers = [...this.element.answers, ...resp.answers];
-    // })
+    this.dhiti.post(this.config).subscribe(resp =>{
+    this.completedDate = resp.completedDate;
+    this.element.answers = [...this.element.answers, ...resp.answers];
+    })
   }
   loadMoreReports(){
     this.config.payload.completedDate = this.completedDate

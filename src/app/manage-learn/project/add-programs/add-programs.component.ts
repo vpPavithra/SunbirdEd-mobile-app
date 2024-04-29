@@ -37,12 +37,14 @@ export class AddProgramsComponent implements OnInit {
     const config = {
       url: urlConstants.API_URLS.PROGRAM_LISTING+'isAPrivateProgram=true',
     }
-   let data = await this.kendraApiService.get(config);
-      this.loaderService.stopLoader();
-      if (data.result && data.result.length) {
-        this.dataList = data.result;
-      }
-   
+      this.kendraApiService.get(config).subscribe(data => {
+        this.loaderService.stopLoader();
+        if (data.result && data.result.length) {
+          this.dataList = data.result;
+        }
+      }, error => {
+        this.loaderService.stopLoader(); 
+      })
   }
   async createProgram() {
     let text;

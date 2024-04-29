@@ -46,7 +46,8 @@ export class ObservationService {
           `${observationId}?entityId=${entityId}&submissionNumber=${submissionNumber}`,
         payload: payload,
       };
-     let success = await this.assessmentService.post(config);
+      this.assessmentService.post(config).subscribe(
+        async (success) => {
           this.ulsdp.mapSubmissionDataToQuestion(success.result, true);
           const generalQuestions = success.result['assessment']['generalQuestions']
             ? success.result['assessment']['generalQuestions']
@@ -65,6 +66,9 @@ export class ObservationService {
             success.result
           );
           resolve(success.result.assessment.submissionId);
+        },
+        (error) => {}
+      );
     });
   }
 

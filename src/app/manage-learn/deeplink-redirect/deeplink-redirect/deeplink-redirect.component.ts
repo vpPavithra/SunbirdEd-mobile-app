@@ -145,20 +145,20 @@ export class DeeplinkRedirectComponent implements OnInit {
       url: urlConstants.API_URLS.TEMPLATE_DETAILS + data.solutionId,
       payload: payload,
     };
-    // this.assessmentService.post(config).subscribe((success) => {
-    //   if (success.result) {
-    //     success.result.isATargetedSolution = data.isATargetedSolution;
-    //     success.result.programId = data.programId;
-    //     success.result.programName = data.programName;
-    //     this.redirectObservation(success.result);
-    //   }else{
-    //   this.location.back();
-    //   this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
-    //   }
-    // },error =>{
-    //   this.location.back();
-    //   this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
-    // });
+    this.assessmentService.post(config).subscribe((success) => {
+      if (success.result) {
+        success.result.isATargetedSolution = data.isATargetedSolution;
+        success.result.programId = data.programId;
+        success.result.programName = data.programName;
+        this.redirectObservation(success.result);
+      }else{
+      this.location.back();
+      this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
+      }
+    },error =>{
+      this.location.back();
+      this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
+    });
   }
 
    async goToEntities(data) {
@@ -174,7 +174,7 @@ export class DeeplinkRedirectComponent implements OnInit {
       url: urlConstants.API_URLS.DEEPLINK.VERIFY_LINK + link+'?createProject=false',
       payload: payload,
     };
-    let resp = await this.kendra.post(config);
+    let resp = await this.kendra.post(config).toPromise();
     if (resp && resp.result) {
       switch (resp.result.type) {
         case 'improvementProject':

@@ -137,27 +137,27 @@ export class ImageListingComponent implements OnInit {
       payload: payload,
     };
 
-    // this.kendra.post(config).subscribe(
-    //   (success) => {
-    //     this.loader.stopLoader();
-    //     if (!success.result || !success.result[submissionId] || !success.result[submissionId].files) {
-    //       return
-    //     }
-    //     let array = success.result[submissionId].files
-    //       for (let i = 0; i < array.length; i++) {
-    //         this.imageList[i]['url'] = array[i].url;
-    //         this.imageList[i]['sourcePath'] = array[i].payload.sourcePath;
-    //         array[i].cloudStorage ? (this.imageList[i]['cloudStorage'] = array[i].cloudStorage) : null;
-    //       }
-    //     this.checkForLocalFolder();
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //     this.translate.get('FRMELEMENTS_MSG_ENABLE_TO_GET_GOOGLE_URLS').subscribe((translations) => {
-    //       this.toast.openToast(translations);
-    //     });
-    //   }
-    // );
+    this.kendra.post(config).subscribe(
+      (success) => {
+        this.loader.stopLoader();
+        if (!success.result || !success.result[submissionId] || !success.result[submissionId].files) {
+          return
+        }
+        let array = success.result[submissionId].files
+          for (let i = 0; i < array.length; i++) {
+            this.imageList[i]['url'] = array[i].url;
+            this.imageList[i]['sourcePath'] = array[i].payload.sourcePath;
+            array[i].cloudStorage ? (this.imageList[i]['cloudStorage'] = array[i].cloudStorage) : null;
+          }
+        this.checkForLocalFolder();
+      },
+      (error) => {
+        this.loader.stopLoader();
+        this.translate.get('FRMELEMENTS_MSG_ENABLE_TO_GET_GOOGLE_URLS').subscribe((translations) => {
+          this.toast.openToast(translations);
+        });
+      }
+    );
   }
 
   checkForLocalFolder() {
@@ -265,24 +265,24 @@ export class ImageListingComponent implements OnInit {
       payload: payload,
     };
 
-    // this.assessmentService.post(config).subscribe(
-    //   (response) => {
-    //     if (this.schoolData.observation) {
-    //     }
-    //     if (response && response.result && response.result.allowed==false) {
-    //       this.toast.openToastWithClose(this.allStrings['FRMELEMENTS_MSG_SUBMISSION_NOT_ALLOWED']);
-    //     } else {
-    //       this.toast.openToast(response.message);
-    //     }
-    //     this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
-    //     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
-    //     this.loader.stopLoader();
-    //     history.go(-2);
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //   }
-    // );
+    this.assessmentService.post(config).subscribe(
+      (response) => {
+        if (this.schoolData.observation) {
+        }
+        if (response && response.result && response.result.allowed==false) {
+          this.toast.openToastWithClose(this.allStrings['FRMELEMENTS_MSG_SUBMISSION_NOT_ALLOWED']);
+        } else {
+          this.toast.openToast(response.message);
+        }
+        this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].isSubmitted = true;
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.submissionId), this.schoolData);
+        this.loader.stopLoader();
+        history.go(-2);
+      },
+      (error) => {
+        this.loader.stopLoader();
+      }
+    );
 
   }
 

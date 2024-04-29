@@ -41,17 +41,17 @@ export class ObservationSolutionListingComponent implements OnInit {
         `limit=${this.pageSize}&page=${this.pageNo}&entityType=${this.entityType}`,
       payload: payload,
     };
-    // this.apiService.post(config).subscribe(
-    //   (data) => {
-    //     this.loader.stopLoader();
-    //     this.solutionList = data && data.result ? this.solutionList.concat(data.result.data) : [];
-    //     this.filters = data && data.result && !this.filters.length ? data.result.entityType : this.filters;
-    //     this.showLoadMore = this.solutionList.length < data.result.count ? true : false;
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //   }
-    // );
+    this.apiService.post(config).subscribe(
+      (data) => {
+        this.loader.stopLoader();
+        this.solutionList = data && data.result ? this.solutionList.concat(data.result.data) : [];
+        this.filters = data && data.result && !this.filters.length ? data.result.entityType : this.filters;
+        this.showLoadMore = this.solutionList.length < data.result.count ? true : false;
+      },
+      (error) => {
+        this.loader.stopLoader();
+      }
+    );
   }
 
   goToEntityList(solution) {

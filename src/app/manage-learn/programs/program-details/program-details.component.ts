@@ -77,33 +77,33 @@ export class ProgramDetailsComponent implements OnInit {
         url:`${urlConstants.API_URLS.SOLUTIONS_LISTING}${this.programId}?page=${this.page}&limit=${this.limit}&search=`,
         payload: payload,
       };
-      // this.kendraService.post(config).pipe(takeUntil(this.unsubscribe$)).subscribe(
-      //   async(success) => {
-      //     this.loader.stopLoader();
-      //     this.dataloaded = true;
-      //     if (success.result.data) {
-      //       this.programDetails = success.result
-      //       this.count = success.result.count;
-      //       this.isNewProgram =  success.result.hasOwnProperty('requestForPIIConsent')
-      //       this.payload = {consumerId: success.result.rootOrganisations, objectId: success.result.programId}
-      //       this.formatList()
-      //       this.readMoreOrLess()
-      //       if(this.isNewProgram && this.programDetails.programJoined && this.programDetails?.requestForPIIConsent){
-      //         let profileData = await this.utils.getProfileInfo();
-      //         await this.popupService.getConsent('Program',this.payload,this.programDetails,profileData).then((response)=>{
-      //           if(response){
-      //             this.sharingStatus = response?.status || response
-      //             this.lastUpdatedOn = response?.lastUpdatedOn || Date.now()
-      //           }
-      //         })
-      //       }
-      //     }
-      //   },
-      //   (error) => {
-      //     this.loader.stopLoader();
-      //     this.dataloaded = true;
-      //   }
-      // );
+      this.kendraService.post(config).pipe(takeUntil(this.unsubscribe$)).subscribe(
+        async(success) => {
+          this.loader.stopLoader();
+          this.dataloaded = true;
+          if (success.result.data) {
+            this.programDetails = success.result
+            this.count = success.result.count;
+            this.isNewProgram =  success.result.hasOwnProperty('requestForPIIConsent')
+            this.payload = {consumerId: success.result.rootOrganisations, objectId: success.result.programId}
+            this.formatList()
+            this.readMoreOrLess()
+            if(this.isNewProgram && this.programDetails.programJoined && this.programDetails?.requestForPIIConsent){
+              let profileData = await this.utils.getProfileInfo();
+              await this.popupService.getConsent('Program',this.payload,this.programDetails,profileData).then((response)=>{
+                if(response){
+                  this.sharingStatus = response?.status || response
+                  this.lastUpdatedOn = response?.lastUpdatedOn || Date.now()
+                }
+              })
+            }
+          }
+        },
+        (error) => {
+          this.loader.stopLoader();
+          this.dataloaded = true;
+        }
+      );
     } else {
       this.loader.stopLoader();
       this.dataloaded = true;

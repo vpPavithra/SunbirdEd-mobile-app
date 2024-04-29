@@ -435,7 +435,6 @@ export class UtilsService {
       }
       imageArray = question.fileName.length ? imageArray.concat(question.fileName) : imageArray;
     } else {
-      // imageArray = [...imageArray, question.fileName]
       const newArray = question.fileName.length
         ? imageArray.concat(question.fileName)
         : imageArray;
@@ -446,7 +445,6 @@ export class UtilsService {
 
   async storeMandatoryFields(mandatoryEntitiesList?) {
     if(!mandatoryEntitiesList) this.profile = await this.getProfileData('SERVER');
-    console.log( this.profile," this.profile 449");
     if (!this.profile.role) return;
     let mandatoryFields;
     try {
@@ -458,8 +456,7 @@ export class UtilsService {
     if (mandatoryFields[this.profile.state] && mandatoryFields[this.profile.state][this.profile.role]) return;
 
     try {
-      if(!mandatoryEntitiesList) mandatoryEntitiesList = await this.getMandatoryEntitiesList();
-      console.log(mandatoryEntitiesList,"mandatoryEntitiesList 462")
+      if(!mandatoryEntitiesList) mandatoryEntitiesList = await this.getMandatoryEntitiesList()
       if (!mandatoryEntitiesList || !mandatoryEntitiesList.length) return
       if(!mandatoryFields[this.profile.state]) mandatoryFields[this.profile.state]={}
       mandatoryFields[this.profile.state][this.profile.role] = mandatoryEntitiesList
@@ -470,7 +467,6 @@ export class UtilsService {
   }
 
   async getMandatoryEntities(): Promise<any> {
-    console.log("in getMandatoryEntities");
     let data;
     return new Promise(async (resolve, reject) => {
       try {
@@ -478,16 +474,13 @@ export class UtilsService {
         if (!mandatoryFields[this.profile.state][this.profile.role]) throw "Mandatory fields locally not found";
         data = { result: mandatoryFields[this.profile.state][this.profile.role] }
       } catch {
-        console.log("in catch of getMandatoryEntities");
         const config = {
           url: urlConstants.API_URLS.MANDATORY_ENTITY_TYPES_FOR_ROLES + `${this.profile.state}?role=${this.profile.role}`,
         };
-        data = await this.kendra.get(config);
-        console.log(data,"MANDATORY_ENTITY_TYPES_FOR_ROLES 482");
+        data = await this.kendra.get(config).toPromise()
         data && data.result && data.result.length && this.storeMandatoryFields(data.result)
+
       }
-      console.log(data,"MANDATORY_ENTITY_TYPES_FOR_ROLES 485");
-      console.log(data.result,"MANDATORY_ENTITY_TYPES_FOR_ROLES data.result");
       if (data.result && data.result.length) {
         this.requiredFields = data.result;
         let allFieldsPresent = true;
@@ -497,7 +490,6 @@ export class UtilsService {
             break
           }
         }
-        console.log(allFieldsPresent,"allFieldsPresent 499")
         if (!allFieldsPresent) {
           this.openProfileUpdateAlert()
           resolve(false)
@@ -513,21 +505,26 @@ export class UtilsService {
 
 
   async getMandatoryEntitiesList(): Promise<any> {
-    // return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const config = {
         url:
           urlConstants.API_URLS.MANDATORY_ENTITY_TYPES_FOR_ROLES +
           `${this.profile.state}?role=${this.profile.role}`
       };
-      let data:any = this.kendra.get(config);
-      console.log(data,"517");
+      this.kendra.get(config).subscribe(
+        data => {
           if (data.result && data.result.length) {
             this.requiredFields = data.result;
-            return data.result;
+            resolve(data.result);
           } else {
-            return null;
+            resolve(false);
           }
-    // });
+        },
+        error => {
+          resolve(false);
+        }
+      );
+    });
   }
 
   async openProfileUpdateAlert() {
@@ -560,9 +557,7 @@ export class UtilsService {
   async getProfileInfo(): Promise<any> {
     return new Promise(async (resolve, reject) => {
       this.profile = await this.getProfileData();
-      console.log( this.profile ," this.profile ");
       const mandatoryFields = await this.getMandatoryEntities();
-      console.log(mandatoryFields,"mandatoryFields 561");
       mandatoryFields ? resolve(this.profile) : resolve(null);
     });
   }
@@ -628,14 +623,11 @@ export class UtilsService {
               .getServerProfilesDetails(serverProfileDetailsRequest)
               .toPromise()
               .then(profileData => {
-                console.log(profileData,"profileData");
                 this.zone.run(async () => {
-                console.log(profileData,"profileData");
                   this.userId = profileData.userId;
                   this.profile = profileData;
                   const obj = {};
-                 let data = profileData["userLocations"] ? profileData["userLocations"] : profileData["profileLocation"]
-                  for (const location of data) {
+                  for (const location of profileData["userLocations"]) {
                     obj[location.type] = location.id;
                   }
                   for (const org of profileData["organisations"]) {
@@ -742,9 +734,7 @@ async getSortTasks(project:any) {
 }
 
 getCompletedTaskCount(tasks){
-  // const completedList = _.filter(tasks, function(el) {
-  //   return !el.isDeleted && el.status === statusType.completed;
-  // });
+
   let data ={
     completedTasks : 3,
     progress: 3 / 7

@@ -132,7 +132,8 @@ export class ObservationSubmissionComponent implements OnInit {
       payload: payload
     };
     this.loader.startLoader();
-    let success = await this.assessmentService.post(config)
+    this.assessmentService.post(config).subscribe(
+      async success => {
         if (success.result && success.result.length == 0) {
           if (isDeleted) {
             this.loader.stopLoader();
@@ -164,6 +165,11 @@ export class ObservationSubmissionComponent implements OnInit {
         this.storage.set(this.generatedKey, this.submissionList);
         this.splitCompletedAndInprogressObservations();
         this.tabChange(this.currentTab ? this.currentTab : "all");
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   async fetchDownloaded() {
@@ -518,13 +524,19 @@ export class ObservationSubmissionComponent implements OnInit {
             };
             this.loader.startLoader();
 
-            let success:any = await this.assessmentService.delete(config)
+            this.assessmentService.delete(config).subscribe(
+              success => {
                 this.loader.stopLoader();
 
                 if (success && success.status == 200) {
                   this.getProgramFromStorage(true);
                 }
+              },
+              error => {
+                this.loader.stopLoader();
               }
+            );
+          }
         }
       ]
     });
@@ -541,10 +553,14 @@ export class ObservationSubmissionComponent implements OnInit {
         `${data.submissionId}`,
       payload: payload
     };
-    let success = await this.assessmentService.post(config);
+    this.assessmentService.post(config).subscribe(
+      success => {
         if (success && success.status == 200) {
           this.getProgramFromStorage();
         }
+      },
+      error => {}
+    );
   }
 
   async observeAgain() {
@@ -565,12 +581,18 @@ export class ObservationSubmissionComponent implements OnInit {
           `${observationId}?entityId=${entityId}`,
         payload: payload
       };
-      let success = await this.assessmentService.post(config);
+      this.assessmentService.post(config).subscribe(
+        success => {
           this.loader.stopLoader();
 
           if (success && success.status == 200) {
             this.getProgramFromStorage();
           }
+        },
+        error => {
+          this.loader.stopLoader();
+        }
+      );
     }
   }
 

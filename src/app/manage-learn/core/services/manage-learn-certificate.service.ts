@@ -20,39 +20,39 @@ export class ManageLearnCertificateService {
     const config ={
       url : urlConstants.API_URLS.PROJECT_CERTIFICATE_DOWNLOAD + data.split('certs/')[1].split('?')[0]
     }
-    // this.unanti.get(config).subscribe(resp =>{
-    //    this.verifyCertificate(resp);
-    // })
+    this.unanti.get(config).subscribe(resp =>{
+       this.verifyCertificate(resp);
+    })
   }
   async verifyCertificate(data){
     const config ={
       url : urlConstants.API_URLS.CERTIFICATE_VERIFY +data.issuer.kid
     }
-  //   this.unanti.get(config).subscribe(async resp =>{
-  //   if(resp.value) {
-  //       let payload ={
-  //         issuanceDate : data.completedDate,
-  //         trainingName :data.projectName,
-  //         issuedTo:data.recipient.name 
-  //       }
-  //     const qrAlert = await this.popoverCtrl.create({
-  //       component: CertificateVerificationPopoverComponent,
-  //       componentProps: {
-  //         certificateData: payload,
-  //         isProject : true,
-  //         actionsButtons: [
-  //             {
-  //                 btntext: 'OKAY',
-  //                 btnClass: 'sb-btn sb-btn-sm  sb-btn-tertiary'
-  //             }
-  //         ],
-  //     },
-  //     cssClass: 'sb-popover',
-  //   });
-  //   await qrAlert.present();
-  // } else {
-  //   this.commonUtilService.afterOnBoardQRErrorAlert('INVALID_QR', 'CERTIFICATE_VERIFICATION_FAIL', data);
-  // }
-  //   })
+    this.unanti.get(config).subscribe(async resp =>{
+    if(resp.value) {
+        let payload ={
+          issuanceDate : data.completedDate,
+          trainingName :data.projectName,
+          issuedTo:data.recipient.name 
+        }
+      const qrAlert = await this.popoverCtrl.create({
+        component: CertificateVerificationPopoverComponent,
+        componentProps: {
+          certificateData: payload,
+          isProject : true,
+          actionsButtons: [
+              {
+                  btntext: 'OKAY',
+                  btnClass: 'sb-btn sb-btn-sm  sb-btn-tertiary'
+              }
+          ],
+      },
+      cssClass: 'sb-popover',
+    });
+    await qrAlert.present();
+  } else {
+    this.commonUtilService.afterOnBoardQRErrorAlert('INVALID_QR', 'CERTIFICATE_VERIFICATION_FAIL', data);
+  }
+    })
   }
 }

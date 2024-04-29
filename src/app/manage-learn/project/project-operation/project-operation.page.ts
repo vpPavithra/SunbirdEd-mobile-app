@@ -173,7 +173,6 @@ export class ProjectOperationPage  {
       componentProps: {
         type: type
       }
-      // cssClass: 'my-custom-class'
     });
     modal.onDidDismiss().then(data => {
       if (type == 'entity') {
@@ -216,7 +215,6 @@ export class ProjectOperationPage  {
     const modal = await this.modalController.create({
       component: AddEntityComponent,
       componentProps: {
-        // entityType: entityType ? entityType : null
       },
       cssClass: 'my-custom-class'
     });
@@ -232,7 +230,6 @@ export class ProjectOperationPage  {
       componentProps: {
         selectedResources: cloneDeep(this.selectedResources),
       },
-      // cssClass: 'my-custom-class'
     });
     modal.onDidDismiss().then(data => {
       this.selectedResources = data.data ? data.data : this.selectedResources;
@@ -281,7 +278,6 @@ export class ProjectOperationPage  {
     if(!newProject &&  JSON.stringify(this.template) !== JSON.stringify(this.templateCopy)){
       this.template.isEdit = true;
       this.template.status =  this.template.status ? this.template.status : statusType.started;
-      // this.template.status =  this.template.status == statusType.notStarted ? statusType.inProgress:this.template.status;
     }
     this.template.isDeleted = false;
     this.db.update(this.template).then(success => {
@@ -306,9 +302,7 @@ export class ProjectOperationPage  {
           cssClass: 'secondary',
           handler: (blah) => {
             if(isNew){
-              debugger
-              this.projectServ.createNewProject(this.template, false) 
-              // this.networkService.isNetworkAvailable ? this.projectServ.createNewProject(this.template, false) : this.toast.showMessage('FRMELEMNTS_MSG_PLEASE_GO_ONLINE', 'danger');
+              this.networkService.isNetworkAvailable ? this.projectServ.createNewProject(this.template, false) : this.toast.showMessage('FRMELEMNTS_MSG_PLEASE_GO_ONLINE', 'danger');
               return;
             }
             this.showSkip ? this.router.navigate([`${RouterLinks.PROJECT}/${RouterLinks.DETAILS}`], {

@@ -228,7 +228,7 @@ async closeConsent(){
       };
       const loader = await this.commonUtils.getLoader();
       await loader.present();
-      let response = await this.kendra.post(config);
+      let response = await this.kendra.post(config).toPromise()
       if(response && response.status == 200){
         loader.dismiss()
         return true

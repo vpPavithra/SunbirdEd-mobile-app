@@ -122,7 +122,6 @@ export class ProjectTemplatePage {
     this.headerConfig.showBurgerMenu = false;
     this.headerConfig.pageTitle = data['FRMELEMNTS_LBL_PROJECT_VIEW'];
     this.headerService.updatePageConfig(this.headerConfig);
-    // this.handleBackButton();
   }
 
   async getProjectApi() {
@@ -132,7 +131,7 @@ export class ProjectTemplatePage {
       url: urlConstants.API_URLS.TEMPLATE_DETAILS + this.id,
       payload: payload,
     };
-    let resp = await this.kendra.post(config);
+    let resp = await this.kendra.post(config).toPromise();
     this.project = resp.result;
     this.categories = [];
     this.project.categories.forEach((category: any) => {
@@ -185,7 +184,7 @@ export class ProjectTemplatePage {
     };
     let resp;
     try {
-      resp = await this.unnatiService.post(config);
+      resp = await this.unnatiService.post(config).toPromise();
     } catch (error) {
       console.log(error);
     }

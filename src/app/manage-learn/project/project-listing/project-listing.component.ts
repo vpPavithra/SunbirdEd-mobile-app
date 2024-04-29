@@ -137,17 +137,7 @@ export class ProjectListingComponent {
     }
 
 
-    // private initNetworkDetection() {
-    //     this.networkFlag = this.commonUtilService.networkInfo.isNetworkAvailable;
-    //     this.projects = [];
-    //     this._networkSubscription = this.commonUtilService.networkAvailability$.subscribe(async (available: boolean) => {
-    //         this.clearFields();
-    //         this.networkFlag = available;
-    //         this.projects = [];
-    //         console.log(this.projects, "this.projects 123");
-    //         this.fetchProjectList();
-    //     });
-    // }
+
 
     getDownloadedProjectsList() {
         this.getDownloadedProjects().then(project => {
@@ -223,15 +213,14 @@ export class ProjectListingComponent {
             default:
                 break;
         }
-        // if (this.networkFlag) {
+        if (this.networkFlag) {
             this.selectedFilterIndex !== 2 ? this.getProjectList() : this.getCreatedProjects()
-        // } else {
-        //     this.getDownloadedProjectsList();
-        // }
+        } else {
+            this.getDownloadedProjectsList();
+        }
     }
 
     async getProjectList() {
-        console.log("project list calling");
         let offilineIdsArr = await this.getDownloadedProjects(['_id']);
         if (!this.networkFlag) {
             return;
@@ -240,25 +229,27 @@ export class ProjectListingComponent {
         if (this.selectedFilter == 'assignedToMe' || this.selectedFilter == 'discoveredByMe') {
             this.payload = !this.payload ? await this.utils.getProfileInfo() : this.payload;
         }
-        console.log( this.payload ," this.payload ");
         const config = {
             url: urlConstants.API_URLS.GET_TARGETED_SOLUTIONS + '?type=improvementProject&page=' + this.page + '&limit=' + this.limit + '&search=' + encodeURIComponent(this.searchText) + '&filter=' + this.selectedFilter,
             payload: this.selectedFilter !== 'createdByMe' ? this.payload : ''
         }
-        console.log(config,"config")
-       let success =  await this.kendra.post(config);
-       console.log(success,"success");
-            this.loader.stopLoader();
-            this.projects = this.projects.concat(success.result.data);
-            // if (offilineIdsArr){
-            //     this.projects.map((p) => {
-            //         if (offilineIdsArr.find((offProject) => offProject['_id'] == p._id)) p.downloaded = true;
-            //     });
-            // }
-            this.count = success.result.count;
-            this.currentOnlineProjectLength = this.currentOnlineProjectLength + success.result.data.length;
-            this.description = success.result.description;
+    this.kendra.post(config).subscribe((success:any) => {
+        this.loader.stopLoader();
+        this.projects = this.projects.concat(success.result.data);
+        // if (offilineIdsArr){
+        //     this.projects.map((p) => {
+        //         if (offilineIdsArr.find((offProject) => offProject['_id'] == p._id)) p.downloaded = true;
+        //     });
+        // }
+        this.count = success.result.count;
+        this.currentOnlineProjectLength = this.currentOnlineProjectLength + success.result.data.length;
+        this.description = success.result.description;
+    }, error => {
+        this.projects = [];
+        this.loader.stopLoader();
+    })
     }
+
 
     ionViewWillLeave() {
         if (this.backButtonFunc) {
@@ -279,8 +270,6 @@ export class ProjectListingComponent {
         if (!project?._id) {
             this.router.navigate([`${RouterLinks.PROJECT}/${RouterLinks.PROJECT_TEMPLATE}`, project.solutionId], {
                 queryParams: {
-                    // data: project
-                    // projectId: project?._id && ,
                     programId: project.programId,
                     solutionId: project.solutionId,
                     type: selectedFilter,
@@ -328,7 +317,6 @@ export class ProjectListingComponent {
             })
         } else {
             this.projects = [];
-            // this.getDownloadedProjectsList();
             this.fetchProjectList();
         }
     }
@@ -407,7 +395,6 @@ export class ProjectListingComponent {
             projectData.downloaded = true
             await this.db.update(projectData)
             project.downloaded = true
-            // this.initNetworkDetection()
             return
         }
 
@@ -419,7 +406,7 @@ export class ProjectListingComponent {
             url: urlConstants.API_URLS.GET_PROJECT + id + '?solutionId=' + project.solutionId,
             payload: this.selectedFilterIndex == 1 ? payload : {},
         };
-       let success = await  this.unnatiService.post(config);
+        this.unnatiService.post(config).subscribe(async (success) => {
             this.loader.stopLoader();
             let data = success.result;
             success.result.downloaded = true;
@@ -448,10 +435,8 @@ export class ProjectListingComponent {
 
             }
             await this.db.create(success.result)
-            // this.initNetworkDetection()
-            project.downloaded = true;
-
-
+            project.downloaded = true;  
+        })
     }
 
     ngOnDestroy() {

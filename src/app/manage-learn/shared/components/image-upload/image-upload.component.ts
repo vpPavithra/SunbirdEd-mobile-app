@@ -1,29 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-// import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
-import {  Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-
 import { File } from '@awesome-cordova-plugins/file/ngx';
-// import { ImagePicker, ImagePickerOptions } from '@awesome-cordova-plugins/image-picker/ngx';
-// import { ImagePicker } from '@jonz94/capacitor-image-picker';
-
 import { TranslateService } from "@ngx-translate/core";
-// import { FileChooser } from '@awesome-cordova-plugins/file-chooser/ngx';
-import { FilePicker } from '@capawesome/capacitor-file-picker';
-
-// import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-// import { PhotoLibrary } from '@awesome-cordova-plugins/photo-library/ngx';
-// import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { FileOpener,FileOpenerOptions } from '@capacitor-community/file-opener';
 import { Media, MediaObject } from '@awesome-cordova-plugins/media/ngx';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx';
-import { AttachmentService, FILE_EXTENSION_HEADERS, LocalStorageService, ToastService, UtilsService } from '../../../../../app/manage-learn/core';
-import { ActionSheetController, AlertController, Platform } from '@ionic/angular';
+import { AttachmentService, ToastService, UtilsService } from '../../../../../app/manage-learn/core';
+import { AlertController, Platform } from '@ionic/angular';
 import { GenericPopUpService } from '../../generic.popup';
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { CommonUtilService } from '../../../../../services';
-
 @Component({
   selector: 'app-image-upload',
   templateUrl: './image-upload.component.html',
@@ -73,19 +58,10 @@ export class ImageUploadComponent implements OnInit {
   localEvidenceImageList: any;
 
   constructor(
-    private actionSheet: ActionSheetController,
-    // private camera: Camera,
-    private localStorage: LocalStorageService,
     private file: File,
-    // private imgPicker: ImagePicker,
     private utils: UtilsService,
-    // private photoLibrary: PhotoLibrary,
     private platform: Platform,
     private translate: TranslateService,
-    // private filePath: FilePath,
-    // private fileOpener: FileOpener,
-    // private fileChooser: FileChooser,
-    private chooser: Chooser,
     private androidPermissions: AndroidPermissions,
     private diagnostic: Diagnostic,
     private media: Media,

@@ -121,43 +121,43 @@ export class ObservationDetailComponent implements OnInit {
         payload: payload
       };
       this.loader.startLoader();
-      // this.assessmentService.post(config).subscribe(
-      //   async success => {
-      //     this.loader.stopLoader();
-      //     if (success && success.result && success.result.entities) {
-      //       this.disableAddEntity = false;
-      //       this.solutionData = {...success.result, programId:this.programId, programName:this.programName||''};
-      //       this.entities = success.result.entities;
-      //       this.entityType = success.result.entityType;
-      //       this.isNewProgram = success.result.hasOwnProperty('requestForPIIConsent')
-      //       this.payload = {consumerId: success.result.rootOrganisations, objectId: this.programId}
-      //       if (!this.observationId) {
-      //         this.observationId = success.result._id; // for autotargeted if get observationId
-      //       }
-      //       if(this.isNewProgram && this.solutionData?.programJoined && this.solutionData?.requestForPIIConsent){
-      //         let profileData = await this.utils.getProfileInfo();
-      //         await this.popupService.getConsent('Program',this.payload,this.solutionData,profileData,'FRMELEMNTS_MSG_PROGRAM_JOINED_SUCCESS').then((response)=>{
-      //           if(response){
-      //             this.solutionData.consentShared = true
-      //           }
-      //         })
-      //       }
-      //       this.localStorage.setLocalStorage(this.generatedKey,success.result);
+      this.assessmentService.post(config).subscribe(
+        async success => {
+          this.loader.stopLoader();
+          if (success && success.result && success.result.entities) {
+            this.disableAddEntity = false;
+            this.solutionData = {...success.result, programId:this.programId, programName:this.programName||''};
+            this.entities = success.result.entities;
+            this.entityType = success.result.entityType;
+            this.isNewProgram = success.result.hasOwnProperty('requestForPIIConsent')
+            this.payload = {consumerId: success.result.rootOrganisations, objectId: this.programId}
+            if (!this.observationId) {
+              this.observationId = success.result._id; // for autotargeted if get observationId
+            }
+            if(this.isNewProgram && this.solutionData?.programJoined && this.solutionData?.requestForPIIConsent){
+              let profileData = await this.utils.getProfileInfo();
+              await this.popupService.getConsent('Program',this.payload,this.solutionData,profileData,'FRMELEMNTS_MSG_PROGRAM_JOINED_SUCCESS').then((response)=>{
+                if(response){
+                  this.solutionData.consentShared = true
+                }
+              })
+            }
+            this.localStorage.setLocalStorage(this.generatedKey,success.result);
 
-      //     } else {
-      //       this.disableAddEntity = true;
-      //       this.entities = [];
-      //       if (!this.observationId) {
-      //         this.observationId = success.result._id; // for autotargeted if get observationId
-      //       }
-      //     }
-      //     this.observationService.obsTraceObj.observationId = this.observationId;
-      //   },
-      //   error => {
-      //     this.entities = [];
-      //     this.loader.stopLoader();
-      //   }
-      // );
+          } else {
+            this.disableAddEntity = true;
+            this.entities = [];
+            if (!this.observationId) {
+              this.observationId = success.result._id; // for autotargeted if get observationId
+            }
+          }
+          this.observationService.obsTraceObj.observationId = this.observationId;
+        },
+        error => {
+          this.entities = [];
+          this.loader.stopLoader();
+        }
+      );
     }
   }
 
@@ -169,12 +169,12 @@ export class ObservationDetailComponent implements OnInit {
       url: url,
       payload: payload
     };
-    // this.dhiti.post(config).subscribe(
-    //   success => {
-    //     this.submissionCount = success.data.noOfSubmissions;
-    //   },
-    //   error => {}
-    // );
+    this.dhiti.post(config).subscribe(
+      success => {
+        this.submissionCount = success.data.noOfSubmissions;
+      },
+      error => {}
+    );
   }
 
   goToObservationSubmission(entity) { 
@@ -238,14 +238,14 @@ export class ObservationDetailComponent implements OnInit {
         `${this.observationId}`,
       payload: payload
     };
-    // this.assessmentService.post(config).subscribe(
-    //   success => {
-    //     if (success) {
-    //       this.getObservationEntities();
-    //     }
-    //   },
-    //   error => {}
-    // );
+    this.assessmentService.post(config).subscribe(
+      success => {
+        if (success) {
+          this.getObservationEntities();
+        }
+      },
+      error => {}
+    );
   }
   
   async removeEntity(entity) {
@@ -289,17 +289,17 @@ export class ObservationDetailComponent implements OnInit {
         urlConstants.API_URLS.OBSERVATION_UPDATE_ENTITES +
         `${this.observationId}?entityId=${entityId}`,
     };
-    // this.assessmentService.delete(config).subscribe(
-    //   success => {
-    //     this.toast.openToast(success.message);
+    this.assessmentService.delete(config).subscribe(
+      success => {
+        this.toast.openToast(success.message);
 
-    //     this.loader.stopLoader();
-    //     this.getObservationEntities();
-    //   },
-    //   error => {
-    //     this.loader.stopLoader();
-    //   }
-    // );
+        this.loader.stopLoader();
+        this.getObservationEntities();
+      },
+      error => {
+        this.loader.stopLoader();
+      }
+    );
   }
 
   async entityClickAction(e):Promise<any>{

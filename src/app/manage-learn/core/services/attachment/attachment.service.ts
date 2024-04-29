@@ -1,23 +1,17 @@
+
 import { Injectable } from "@angular/core";
-// import { Camera, CameraOptions, MediaType, PictureSourceType } from "@awesome-cordova-plugins/camera/ngx";
-import {  Camera, CameraResultType, CameraSource  } from '@capacitor/camera';
-import { Chooser } from '@ionic-native/chooser/ngx';
-
-// import { Chooser } from "@awesome-cordova-plugins/chooser/ngx";
-import { FileChooser } from '@ionic-native/file-chooser/ngx';
-// import { FilePath } from "@awesome-cordova-plugins/file-path/ngx";
-import { FilePath } from '@ionic-native/file-path/ngx';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { Chooser } from "@ionic-native/chooser/ngx";
+import { FilePicker } from "@capawesome/capacitor-file-picker";
+import { FileChooser } from "@ionic-native/file-chooser/ngx";
+import { FilePath } from "@ionic-native/file-path/ngx";
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { File } from "@awesome-cordova-plugins/file/ngx";
-
-import { ActionSheetController, Platform, ToastController } from "@ionic/angular";
+import {ActionSheetController,Platform,ToastController} from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { FILE_EXTENSION_HEADERS } from "../../constants";
 import { localStorageConstants } from "../../constants/localStorageConstants";
 import { LoaderService } from "../loader/loader.service";
-// import { ImagePicker } from '@jonz94/capacitor-image-picker';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +28,10 @@ export class AttachmentService {
     private toastController: ToastController,
     private platform: Platform,
     private chooser: Chooser,
-    // private filePickerIOS: IOSFilePicker,
     private translate: TranslateService,
     private loader: LoaderService,
-    private filePath : FilePath
+    private filePath: FilePath,
+    private fileChooser: FileChooser
 
   ) {
     this.translate
@@ -64,42 +58,42 @@ export class AttachmentService {
   async selectImage(path?) {
     this.actionSheetOpen = true;
     this.storagePath = path;
-    // const actionSheet = await this.actionSheetController.create({
-    //   header: this.texts["FRMELEMNTS_MSG_SELECT_IMAGE_SOURCE"],
-    //   cssClass: 'sb-popover',
-    //   buttons: [
-    //     {
-    //       text: this.texts["FRMELEMNTS_MSG_LOAD_FROM_LIBRARY"],
-    //       icon: "cloud-upload",
-    //       handler: () => {
-    //         this.takePicture(CameraSource.Photos, CameraResultType.Uri, true);
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["FRMELEMNTS_MSG_USE_CAMERA"],
-    //       icon: "camera",
-    //       handler: () => {
-    //         this.takePicture(CameraSource.Photos);
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["FRMELEMNTS_MSG_USE_FILE"],
-    //       icon: "document",
-    //       handler: () => {
-    //         path ? this.openLocalLibrary() : this.openFile();
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["CANCEL"],
-    //       role: "cancel",
-    //     },
-    //   ],
-    // });
-    // await actionSheet.present();
-    // return actionSheet.onDidDismiss();
+    const actionSheet = await this.actionSheetController.create({
+      header: this.texts["FRMELEMNTS_MSG_SELECT_IMAGE_SOURCE"],
+      cssClass: 'sb-popover',
+      buttons: [
+        {
+          text: this.texts["FRMELEMNTS_MSG_LOAD_FROM_LIBRARY"],
+          icon: "cloud-upload",
+          handler: () => {
+            this.takePicture(CameraSource.Photos);
+            return false;
+          },
+        },
+        {
+          text: this.texts["FRMELEMNTS_MSG_USE_CAMERA"],
+          icon: "camera",
+          handler: () => {
+            this.takePicture(CameraSource.Camera);
+            return false;
+          },
+        },
+        {
+          text: this.texts["FRMELEMNTS_MSG_USE_FILE"],
+          icon: "document",
+          handler: () => {
+            this.openFile();
+            return false;
+          },
+        },
+        {
+          text: this.texts["CANCEL"],
+          role: "cancel",
+        },
+      ],
+    });
+    await actionSheet.present();
+    return actionSheet.onDidDismiss();
     return {};
   }
 
@@ -108,203 +102,257 @@ export class AttachmentService {
   async evidenceUpload(path?) {
     this.actionSheetOpen = true;
     this.storagePath = path;
-    // const actionSheet = await this.actionSheetController.create({
-    //   header: this.texts["FRMELEMNTS_MSG_SELECT_IMAGE_SOURCE"],
-    //   cssClass: 'sb-popover',
-    //   buttons: [
-    //     {
-    //       text: this.texts["FRMELEMENTS_LBL_CAMERA"],
-    //       icon: "camera",
-    //       handler: () => {
-    //         this.takePicture(CameraSource.Camera);
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["FRMELEMENTS_LBL_UPLOAD_IMAGE"],
-    //       icon: "cloud-upload",
-    //       handler: () => {
-    //         this.takePicture(CameraSource.Photos, CameraResultType.Uri);
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["FRMELEMENTS_LBL_UPLOAD_VIDEO"],
-    //       icon: "videocam",
-    //       handler: () => {
-    //         this.takePicture(CameraSource.Photos, CameraResultType.Uri, true);
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["FRMELEMENTS_LBL_UPLOAD_FILE"],
-    //       icon: "document",
-    //       handler: () => {
-    //         this.openFile();
-    //         return false;
-    //       },
-    //     },
-    //     {
-    //       text: this.texts["CANCEL"],
-    //       role: "cancel",
-    //     },
-    //   ],
-    // });
-    // await actionSheet.present();
-    // return actionSheet.onDidDismiss();
-    return null
+    const actionSheet = await this.actionSheetController.create({
+      header: this.texts["FRMELEMNTS_MSG_SELECT_IMAGE_SOURCE"],
+      cssClass: 'sb-popover',
+      buttons: [
+        {
+          text: this.texts["FRMELEMENTS_LBL_CAMERA"],
+          icon: "camera",
+          handler: () => {
+            this.takePicture(CameraSource.Camera);
+            return false;
+          },
+        },
+        {
+          text: this.texts["FRMELEMENTS_LBL_UPLOAD_IMAGE"],
+          icon: "cloud-upload",
+          handler: () => {
+            this.takePicture(CameraSource.Photos);
+            return false;
+          },
+        },
+        {
+          text: this.texts["FRMELEMENTS_LBL_UPLOAD_VIDEO"],
+          icon: "videocam",
+          handler: () => {
+            this.openVideo();
+            return false;
+          },
+        },
+        {
+          text: this.texts["FRMELEMENTS_LBL_UPLOAD_FILE"],
+          icon: "document",
+          handler: () => {
+            this.openFile();
+            return false;
+          },
+        },
+        {
+          text: this.texts["CANCEL"],
+          role: "cancel",
+        },
+      ],
+    });
+    await actionSheet.present();
+    return actionSheet.onDidDismiss();
+    return null;
   }
-  async takePicture(source: CameraSource, resultType: CameraResultType = CameraResultType.Uri, video = false) {
-    const options = {
-      quality: 20,
-      allowEditing: false,
-      resultType: resultType,
-      source: source,
-      preserveAspectRatio: true
-    };
-    console.log(source,"source");
-    // const image = source == "" await Camera.getPhoto(options);
-    let photo = await Camera.getPhoto(options);
-    console.log(photo,"photo");
-    const image = await Camera.getPhoto(options)
-    console.log(image,"image");
-    console.log(this.platform.is("android"),"android");
-    console.log(this.directoryPath(),"this.directoryPath()");
-    if(image){
+  async openVideo() {
+    try {
+      const result = await FilePicker.pickVideos();
+      console.log(result,"result");
+    if (result) {
       if (this.platform.is("android")) {
-              let newFilePath = image?.path;
-              if (!newFilePath.includes("content://") && !newFilePath.includes("file://")) {
-                newFilePath = "file://" + image?.path
-              }
-              await this.checkForFileSizeRestriction(newFilePath).then(isValidFile => {
-                          if (isValidFile) {
-                            // this.Filesystem
-                            //   .resolveNativePath(newFilePath)
-                            //   .then((filePath) => {
-                                this.copyFile(newFilePath);
-                              // })
-                              // .catch(error => { })
-                          }
-                        })
-            }
-    }else{
-
-    }
-    // await this.camera
-    //   .getPicture(options)
-    //   .then(async(imagePath) => {
-    //     if (this.platform.is("android") && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-    //       let newFilePath = imagePath;
-    //       if (!newFilePath.includes("content://") && !newFilePath.includes("file://")) {
-    //         newFilePath = "file://" + imagePath
-    //       }
-    //         await this.checkForFileSizeRestriction(newFilePath).then(isValidFile => {
-    //           if (isValidFile) {
-    //             this.filePath
-    //               .resolveNativePath(newFilePath)
-    //               .then((filePath) => {
-    //                 this.copyFile(filePath);
-    //               })
-    //               .catch(error => { })
-    //           }
-    //         })
-    //     } else {
-    //       await this.checkForFileSizeRestriction(imagePath).then(isValidFile => {
-    //         if (isValidFile) {
-    //           this.copyFile(imagePath);
-    //         }
-    //       })
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     if (err && err !== "No Image Selected") {
-    //       this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
-    //     }
-    //   });
-  }
-
-  writeFileToPrivateFolder(filePath) {
-    this.checkForFileSizeRestriction(filePath).then(isValidFile => {
-      if (isValidFile) {
-        this.loader.startLoader();
-        let path = filePath.substr(0, filePath.lastIndexOf("/") + 1);
-        let currentName = filePath.split("/").pop();
-        this.file.readAsArrayBuffer(path, currentName).then(success => {
-          const pathToWrite = this.directoryPath();
-          const newFileName = this.createFileName(currentName)
-          this.file.writeFile(pathToWrite, newFileName, success).then(async fileWrite => {
-            const data = {
-              name: newFileName,
-              type: this.mimeType(newFileName),
-              isUploaded: false,
-              url: "",
-            };
-            await this.loader.stopLoader();
-            this.presentToast(this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"], "success");
-            this.actionSheetOpen ? this.actionSheetController.dismiss(data) : this.payload.push(data);
-          }).catch(error => {
-            this.loader.stopLoader();
-            this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
-          })
-        }).catch(error => {
-          this.loader.stopLoader();
-          this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
-        })
+        if (result?.files[0].size > localStorageConstants.FILE_LIMIT) {
+          this.presentToast(
+            this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"],
+            "danger",
+            5000
+          );
+          return;
+        } else {
+          let newFilePath = result?.files[0].path;
+          let correctPath = newFilePath;
+    let currentName = result?.files[0].name;
+          this.copyFileToLocalDir(
+            correctPath,
+            currentName,
+            this.createFileName(currentName),
+            correctPath,
+            true
+          );
+        }
       }
-    }).catch(error => { })
+    }
+  } catch (error) {
+    console.error("Error getting file metadata:", error);
+    throw error; 
   }
+}
+async takePicture(
+  source: CameraSource,
+  resultType: CameraResultType = CameraResultType.Uri,
+  video = false
+) {
+  const options = {
+    quality: 20,
+    allowEditing: false,
+    resultType: resultType,
+    source: source,
+    preserveAspectRatio: true,
+  };
+  const image = await Camera.getPhoto(options);
+  if (image) {
+    if (this.platform.is("android")) {
+      let newFilePath = image?.path;
+      if (!newFilePath.includes("content://") && !newFilePath.includes("file://")) {
+        newFilePath = "file://" + image?.path;
+      }
+      await this.checkForFileSizeRestriction(newFilePath).then(
+        (isValidFile) => {
+          if (isValidFile) {
+            this.copyFile(newFilePath);
+          }
+        }
+      );
+    }
+  } else {
+  }
+}
 
+writeFileToPrivateFolder(filePath ,name?) {
+  console.log(name,"name");
+  if(name){ 
+  this.loader.startLoader()
+ let success:any =  Filesystem.readFile({path :filePath});
+ console.log(success,"success");
+ const pathToWrite = this.directoryPath();
+ const newFileName = this.createFileName(name);
+ this.file
+   .writeFile(pathToWrite, newFileName, success?.data)
+   .then(async (fileWrite) => {
+     const data = {
+       name: newFileName,
+       type: this.mimeType(newFileName),
+       isUploaded: false,
+       url: "",
+     };
+     await this.loader.stopLoader();
+     this.presentToast(
+       this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"],
+       "success"
+     );
+     this.actionSheetOpen
+       ? this.actionSheetController.dismiss(data)
+       : this.payload.push(data);
+   })
+   .catch((error) => {
+     this.loader.stopLoader();
+     this.presentToast(
+       this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]
+     );
+   });
+    }else {
+   this.checkForFileSizeRestriction(filePath)
+  .then((isValidFile) => {
+    if (isValidFile) {
+      this.loader.startLoader();
+      let path = filePath.substr(0, filePath.lastIndexOf("/") + 1);
+      let currentName =  filePath.split("/").pop();
+      this.file
+        .readAsArrayBuffer(path, currentName)
+        .then((success) => {
+          const pathToWrite = this.directoryPath();
+          const newFileName = this.createFileName(currentName);
+          this.file
+            .writeFile(pathToWrite, newFileName, success)
+            .then(async (fileWrite) => {
+              const data = {
+                name: newFileName,
+                type: this.mimeType(newFileName),
+                isUploaded: false,
+                url: "",
+              };
+              await this.loader.stopLoader();
+              this.presentToast(
+                this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"],
+                "success"
+              );
+              this.actionSheetOpen
+                ? this.actionSheetController.dismiss(data)
+                : this.payload.push(data);
+            })
+            .catch((error) => {
+              this.loader.stopLoader();
+              this.presentToast(
+                this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]
+              );
+            });
+        })
+        .catch((error) => {
+          console.log(error,"readAsArrayBuffer error 265");
+          this.loader.stopLoader();
+          this.presentToast(
+            this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]
+          );
+        });
+    }
+  })
+  .catch((error) => {
+    console.log(error,"error 274");
+  }) 
+}
+    
+}
 
-   checkForFileSizeRestriction(filePath) {
-console.log(filePath,"filePath");
-    return Filesystem.readFile({ path: filePath })
-    .then(fileData => {
-console.log(fileData,"fileData");
+checkForFileSizeRestriction(filePath) {
+  return Filesystem.readFile({ path: filePath })
+    .then((fileData) => {
       return this.getFileMetadata(filePath)
-        .then(metadata => {
-          console.log(metadata,"metadata")
+        .then((metadata) => {
           if (metadata.size > localStorageConstants.FILE_LIMIT) {
-            this.presentToast(this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"], 'danger', 5000);
-            return false; // File size exceeded
+            this.presentToast(
+              this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"],
+              "danger",
+              5000
+            );
+            return false;
           } else {
-            console.log("261 success");
             return true;
           }
         })
-        .catch(metadataError => {
-          console.error('Error getting file metadata:', metadataError);
-          return false; // Error getting file metadata
+        .catch((metadataError) => {
+          return false;
         });
     })
-    .catch(readError => {
-      console.error('Error reading file:', readError);
-      return false; // Error reading file
+    .catch((readError) => {
+      return false;
     });
-  }
+}
 
-  async getFileMetadata(filePath): Promise<any> {
-    try {
-      const readFileResult = await Filesystem.readFile({ path: filePath });
-      console.log(readFileResult, "File content"); // Logging the file content
-      const statResult = await Filesystem.stat({ path: filePath });
-      const metadata = {
-        size: statResult.size,
-        // You can add more metadata properties here if needed
-      };
-      if (metadata.size > localStorageConstants.FILE_LIMIT) {
-                  this.presentToast(this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"],'danger', 5000);
-                  return(false)
-        } else  {
-                  return(true)
-       }
-    } catch (error) {
-      console.error('Error getting file metadata:', error);
-      throw error; // Propagate the error to the caller
+async getFileMetadata(filePath): Promise<any> {
+  try {
+    const readFileResult = await Filesystem.readFile({ path: filePath });
+    console.log(readFileResult, "File content"); // Logging the file content
+    const statResult = await Filesystem.stat({ path: filePath });
+    const metadata = {
+      size: statResult.size,
+      // You can add more metadata properties here if needed
+    };
+    if (metadata.size > localStorageConstants.FILE_LIMIT) {
+      this.presentToast(
+        this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"],
+        "danger",
+        5000
+      );
+      return false;
+    } else {
+      return true;
     }
+  } catch (error) {
+    console.error("Error getting file metadata:", error);
+    throw error; // Propagate the error to the caller
   }
+} 
 
-  copyFileToLocalDir(namePath, currentName, newFileName, completeFilePath) {
-    this.file.copyFile(namePath, currentName, this.directoryPath(), newFileName).then(
+  
+
+async copyFileToLocalDir(namePath, currentName, newFileName, completeFilePath,video?) {
+  console.log(namePath, currentName, newFileName, completeFilePath,"namePath, currentName, newFileName, completeFilePath");
+  this.file
+    .copyFile(namePath, currentName, this.directoryPath(), newFileName)
+    .then(
       (success) => {
         const data = {
           name: newFileName,
@@ -312,15 +360,21 @@ console.log(fileData,"fileData");
           isUploaded: false,
           url: "",
         };
-        this.presentToast(this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"], "success");
-        this.actionSheetOpen ? this.actionSheetController.dismiss(data) : this.payload.push(data);
+        this.presentToast(
+          this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"],
+          "success"
+        );
+        this.actionSheetOpen
+          ? this.actionSheetController.dismiss(data)
+          : this.payload.push(data);
       },
       (error) => {
-        this.writeFileToPrivateFolder(completeFilePath);
-        // this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
+        console.log(error,video,"copyFileToLocalDir",currentName,"currentName");
+video ?
+this.writeFileToPrivateFolder(completeFilePath, currentName) :this.writeFileToPrivateFolder(completeFilePath);
       }
     );
-  }
+}
 
   async presentToast(text, color = "danger", duration = 3000) {
     const toast = await this.toastController.create({
@@ -334,17 +388,26 @@ console.log(fileData,"fileData");
 
   async openFile(path?) {
     try {
-      
-      const file: any = await this.chooser.getFile('application/pdf');
-      console.log(file,"file");
-      let sizeOftheFile: number = file.data.length
+      const result = await FilePicker.pickFiles({
+        types: ["application/pdf"],
+        multiple: false,
+      });
+      const file = result.files[0];
+      let sizeOftheFile: number = result?.files[0].size;
       if (sizeOftheFile > localStorageConstants.FILE_LIMIT) {
         this.presentToast(this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"]);
-        this.actionSheetOpen ?  this.actionSheetController.dismiss() :'';
+        this.actionSheetOpen ? this.actionSheetController.dismiss() : "";
       } else {
-        const pathToWrite = path ? path :this.directoryPath();
-        const newFileName = this.createFileName(file.name)
-        const writtenFile = await this.file.writeFile(pathToWrite, newFileName, file.data.buffer)
+        const sourceFile = await Filesystem.readFile({
+          path: result?.files[0].path,
+        });
+        const pathToWrite = path ? path : this.directoryPath();
+        const newFileName = this.createFileName(result?.files[0].name);
+        const writtenFile = await this.file.writeFile(
+          pathToWrite,
+          newFileName,
+          sourceFile.data
+        );
         if (writtenFile.isFile) {
           const data = {
             name: newFileName,
@@ -352,17 +415,22 @@ console.log(fileData,"fileData");
             isUploaded: false,
             url: "",
           };
-          this.presentToast(this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"], "success");
-          this.actionSheetOpen ? this.actionSheetController.dismiss(data) : this.payload.push(data);
+          this.presentToast(
+            this.texts["FRMELEMNTS_MSG_SUCCESSFULLY_ATTACHED"],
+            "success"
+          );
+          this.actionSheetOpen
+            ? this.actionSheetController.dismiss(data)
+            : this.payload.push(data);
         }
       }
-
     } catch (error) {
-      console.log(error,"error")
-      if(error == "OutOfMemory"){
+      if (error == "OutOfMemory") {
         this.presentToast(this.texts["FRMELEMNTS_LBL_FILE_SIZE_EXCEEDED"]);
-      }else{
-        this.presentToast(this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]);
+      } else {
+        this.presentToast(
+          this.texts["FRMELEMNTS_MSG_ERROR_WHILE_STORING_FILE"]
+        );
       }
     }
   }
@@ -422,7 +490,7 @@ console.log(fileData,"fileData");
         this.takePicture(CameraSource.Photos);
         break;
       case 'openVideo':
-        this.takePicture(CameraSource.Prompt,CameraResultType.Uri, true);
+        this.openVideo();
         break;
       case 'openFiles':
         await this.openFile();

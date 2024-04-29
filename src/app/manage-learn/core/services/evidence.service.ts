@@ -167,20 +167,20 @@ export class EvidenceService {
       url: url,
       payload: payload,
     };
-
-    // this.assessmentService.post(config).subscribe(
-    //   (response) => {
-    //     console.log(JSON.stringify(response));
-    //     this.toast.openToast(response.message);
-    //     this.entityDetails['assessment']['evidences'][this.evidenceIndex].isSubmitted = true;
-    //     this.entityDetails['assessment']['evidences'][this.evidenceIndex].notApplicable = true;
-    //     this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.entityDetails);
-    //     this.loader.stopLoader();
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //   }
-    // );
+    
+    this.assessmentService.post(config).subscribe(
+      (response) => {
+        console.log(JSON.stringify(response));
+        this.toast.openToast(response.message);
+        this.entityDetails['assessment']['evidences'][this.evidenceIndex].isSubmitted = true;
+        this.entityDetails['assessment']['evidences'][this.evidenceIndex].notApplicable = true;
+        this.localStorage.setLocalStorage(this.utils.getAssessmentLocalStorageKey(this.schoolId), this.entityDetails);
+        this.loader.stopLoader();
+      },
+      (error) => {
+        this.loader.stopLoader();
+      }
+    );
   }
 
   constructPayload(selectedECM): any {

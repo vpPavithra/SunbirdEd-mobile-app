@@ -2,19 +2,15 @@ import { Component, Input } from '@angular/core';
 import { LoaderService, ToastService, UtilsService } from '../../../../../app/manage-learn/core';
 import { UnnatiDataService } from '../../../../../app/manage-learn/core/services/unnati-data.service';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
-// import { FilePath } from '@awesome-cordova-plugins/file-path/ngx';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
-// import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Share } from '@capacitor/share';
 
 import { AlertController, Platform, PopoverController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-// import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { FileOpener, FileOpenerOptions } from '@capacitor-community/file-opener';
 import { DhitiApiService } from '../../../../../app/manage-learn/core/services/dhiti-api.service';
-// import { Device } from '@awesome-cordova-plugins/device/ngx';
 import { Device } from '@capacitor/device';
 
 @Component({
@@ -27,7 +23,6 @@ export class DownloadShareComponent {
   @Input() showOptions;
   @Input() name = ['filter'];
   @Input() extension: string;
-  // @Input() downloadUrl: any;
   @Input() config: any;
   texts: any;
   constructor(
@@ -59,7 +54,6 @@ export class DownloadShareComponent {
         interface: 'simple',
         name: this.name,
         extension: this.extension,
-        // downloadUrl: this.downloadUrl,
         config: this.config,
       },
       event: ev,
@@ -72,8 +66,7 @@ export class DownloadShareComponent {
     this.loader.startLoader();
     if (this.config.payload) {
       return new Promise(async (resolve, reject) => {
-        let res = await this.dhiti.post(this.config);
-
+        let res = await this.dhiti.post(this.config).toPromise();
         this.loader.stopLoader();
         if (res.status != 'success' && !res.pdfUrl) {
           this.toast.showMessage(this.texts['FRMELEMENTS_MSG_ERROR_WHILE_DOWNLOADING'], 'danger');
@@ -83,9 +76,7 @@ export class DownloadShareComponent {
       });
     }
     return new Promise(async (resolve, reject) => {
-
-      let res = await this.unnatiSrvc.get(this.config);
-
+      let res = await this.unnatiSrvc.get(this.config).toPromise();
       this.loader.stopLoader();
       if (res.result && !res.result.data && !res.result.data.downloadUrl) {
         this.toast.showMessage(this.texts['FRMELEMENTS_MSG_ERROR_WHILE_DOWNLOADING'], 'danger');
@@ -109,7 +100,6 @@ export class DownloadShareComponent {
     ft.download(url, this.directoryPath() + fileName)
       .then(
         (res) => {
-          // this.toast.showMessage(this.texts['FRMELEMENTS_MSG_SUCCESSFULLY DOWNLOADED'])
           share ? this.share(res.nativeURL) : this.openFile(res);
         },
         (err) => {
@@ -133,9 +123,16 @@ export class DownloadShareComponent {
       ]);
     }
   }
+  
 
-  share(path) {
-    // this.socialSharing.share(null, null, path, null);
+async share(path) {
+      try {
+        await Share.share({
+          url: path,
+        });
+      } catch (error) {
+        return;
+      }
   }
 
   directoryPath(): string {

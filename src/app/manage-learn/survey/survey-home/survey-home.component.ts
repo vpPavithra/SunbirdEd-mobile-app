@@ -79,23 +79,23 @@ export class SurveyHomeComponent {
       url: urlConstants.API_URLS.GET_TARGETED_SOLUTIONS + `?type=survey&page=${this.page}&limit=${this.limit}&surveyReportPage=${this.isReport}`,
       payload: payload,
     };
-    // this.kendra.post(config).subscribe(
-    //   (success) => {
-    //     if (success.result && success.result.data) {
-    //       this.count = success.result.count;
-    //       if (!this.isReport) {
-    //         success.result.data.map(this.surveyProvider.createExpiryMsg.bind(this.surveyProvider))
-    //       }
-    //       this.surveyList = [...this.surveyList, ...success.result.data];
-    //       this.getSubmissionArr();
-    //       this.loader.stopLoader();
-    //     }
-    //   },
-    //   (error) => {
-    //     this.loader.stopLoader();
-    //     console.log(error);
-    //   }
-    // );
+    this.kendra.post(config).subscribe(
+      (success) => {
+        if (success.result && success.result.data) {
+          this.count = success.result.count;
+          if (!this.isReport) {
+            success.result.data.map(this.surveyProvider.createExpiryMsg.bind(this.surveyProvider))
+          }
+          this.surveyList = [...this.surveyList, ...success.result.data];
+          this.getSubmissionArr();
+          this.loader.stopLoader();
+        }
+      },
+      (error) => {
+        this.loader.stopLoader();
+        console.log(error);
+      }
+    );
   }
 
   //check if suvey detail is present in local storage
@@ -251,21 +251,21 @@ export class SurveyHomeComponent {
       url: urlConstants.API_URLS.TEMPLATE_DETAILS + data.solutionId,
       payload: payload,
     };
-    // this.assessmentService.post(config).subscribe((success) => {
-    //   if (success.result) {
-    //     if(success.result.hasOwnProperty('requestForPIIConsent') && !success.result.consentShared){
-    //       this.redirect(success.result.assessment.submissionId,success.result);
-    //     }else{
-    //       data.downloaded
-    //       ? this.redirect(data.submissionId)
-    //       : this.getSurveyById(data._id, data.solutionId, data.isCreator);
-    //     }
-    //   }else{
-    //   this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
-    //   }
-    // },error =>{
-    //   this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
-    // });
+    this.assessmentService.post(config).subscribe((success) => {
+      if (success.result) {
+        if(success.result.hasOwnProperty('requestForPIIConsent') && !success.result.consentShared){
+          this.redirect(success.result.assessment.submissionId,success.result);
+        }else{
+          data.downloaded
+          ? this.redirect(data.submissionId)
+          : this.getSurveyById(data._id, data.solutionId, data.isCreator);
+        }
+      }else{
+      this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
+      }
+    },error =>{
+      this.toast.showMessage('FRMELEMNTS_MSG_TEMPLATE_DETAILS_NOTFOUND','danger');
+    });
   }
 
   async verifyLink(link) {
@@ -275,7 +275,7 @@ export class SurveyHomeComponent {
       url: urlConstants.API_URLS.DEEPLINK.VERIFY_LINK + link+'?createProject=false',
       payload: payload,
     };
-    let resp = await this.kendra.post(config);
+    let resp = await this.kendra.post(config).toPromise();
     if (resp && resp.result) {
       this.loader.stopLoader();
       switch (resp.result.type) {

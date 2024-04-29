@@ -97,9 +97,6 @@ export class SharingFeatureService {
     }
   }
 
-  // regularShare(msg): Promise<any> {
-  //   return this.socialSharing.share(msg, null, null, null);
-  // }
 
 
   async getFileUrl(config, name) {
@@ -108,7 +105,7 @@ export class SharingFeatureService {
       if(name?.length > 40){
         name = name.slice(0, 40) + '...';
       }
-      let res = await this.unnatiSrvc.get(config);
+      let res = await this.unnatiSrvc.get(config).toPromise();
       if (res.result && !res.result.data && !res.result.data.downloadUrl) {
         this.toast.showMessage(this.texts['FRMELEMENTS_MSG_ERROR_WHILE_DOWNLOADING'], 'danger');
         this.loader.stopLoader();
@@ -120,9 +117,12 @@ export class SharingFeatureService {
         ft.download(res.result.data.downloadUrl, this.directoryPath() + fileName)
         .then(
           (res) => {
-            // Share.share(null, null, res.nativeURL, null).then(data =>{
-            // },error =>{
-            // })
+            Share.share({
+              url:res.nativeURL
+            }).then(data =>{
+            },error =>{
+              console.log(error)
+            })
           },
           (err) => {
             this.requestPermission();

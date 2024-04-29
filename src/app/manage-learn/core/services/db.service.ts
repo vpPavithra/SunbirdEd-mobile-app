@@ -81,10 +81,8 @@ export class DbService {
       this.createDb().then(isInitialized => {
         if(isInitialized) {
           this.pdb.put(data).then(success => {
-            console.log(success, "success in update");
             success.ok ? resolve(success) : reject()
           }).catch(error => {
-            console.log(error, "error in update");
             reject(error)
           })
         }
@@ -133,7 +131,6 @@ export class DbService {
     const entries = this.formatDataForBulkCreate(data);
     return new Promise((resolve, reject) => {
           this.pdb.bulkDocs(entries).then(success => {
-            // success.ok ? resolve(success) : reject()
             resolve(success);
           }).catch(error => {
             reject()
@@ -149,18 +146,6 @@ export class DbService {
   }
 
 
-  // update(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-
-  //   })
-  // }
-
-  // delete() : Promise<any> {
-  //   return new Promise((resolve, reject) => {
-
-  //   })
-  // }
-
   query(selector: any, limit: number = 20): Promise<any> {
     return new Promise((resolve, reject) => {
       this.createDb().then(isInitialized => {
@@ -169,7 +154,6 @@ export class DbService {
             selector: selector,
             limit: limit
           }).then(success => {
-            console.log(success, 'success of query')
             resolve(success);
           }).catch(error => {
             reject(error)
@@ -184,7 +168,6 @@ export class DbService {
       this.createDb().then(isInitialized => {
         if(isInitialized) {
           this.pdb.find(query).then(success => {
-            console.log(success, 'success of query')
             resolve(success);
           }).catch(error => {
             reject(error)
@@ -227,7 +210,6 @@ export class DbService {
         if(isInitialized) {
           this.pdb.allDocs({ include_docs: true })
         .then(docs => {
-          console.log(docs,"docs rrr");
           resolve(docs);
         }).catch(error => {
           reject(error);

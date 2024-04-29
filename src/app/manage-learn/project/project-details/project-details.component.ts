@@ -297,7 +297,7 @@ export class ProjectDetailsComponent implements OnInit {
     this.projectServ.getProjectDetails(payload);
   }
 
-  async getProjectTaskStatus() {
+  getProjectTaskStatus() {
     if (!this.projectDetails.tasks && !this.projectDetails.tasks.length) {
       return
     }
@@ -315,12 +315,16 @@ export class ProjectDetailsComponent implements OnInit {
         taskIds: taskIdArr,
       },
     };
-    let success = await this.unnatiService.post(config)
+    this.unnatiService.post(config).subscribe(
+      (success) => {
         if (!success.result) {
           return;
         }
         this.updateAssessmentStatus(success.result);
-     
+      },
+      (error) => {
+      }
+    );
   }
 
   updateAssessmentStatus(data) {

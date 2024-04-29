@@ -72,7 +72,6 @@ export class TaskViewPage {
     private navigateService: NavigationService,
     private commonUtilService: CommonUtilService,
     private routereParams: ActivatedRoute
-    // private openResourceSrvc: OpenResourcesService
   ) {
     this.saveChanges = _.debounce(this.saveChanges, 800);
     this.saveSubTaskChanges = _.debounce(this.saveSubTaskChanges, 800);
@@ -113,7 +112,6 @@ export class TaskViewPage {
           this.viewOnlyMode = true;
           this.project = this.stateData.projectDetails;
         }
-        // this.project = success.docs.length ? success.docs[0] : success.docs;
         this.projectCopy = JSON.parse(JSON.stringify(this.project));
         let task = _.findIndex(this.projectCopy.tasks, (item) => {
           return item._id == this.parameters.taskId;
@@ -336,7 +334,7 @@ export class TaskViewPage {
     this.update("goBack");
   }
   openAction() {
-    this.attachmentService.selectImage().then((data:any) => {
+    this.attachmentService.selectImage().then(data => {
       data.data ? this.attachments.push(data.data) : "";
     });
   }
