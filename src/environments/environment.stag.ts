@@ -13,7 +13,7 @@ export const buildConfig = {
   VERSION_CODE: 1,
   VERSION_NAME: "VERSION_NAME",
   // Field from product flavor: staging
-  BASE_URL: "BASE_URL",
+  BASE_URL: "https://staging.sunbirded.org",
   // Field from product flavor: staging
   CHANNEL_ID: "CHANNEL_ID",
   // Field from product flavor: staging
