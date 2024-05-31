@@ -7,7 +7,6 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonConsumptionModule } from '@project-sunbird/common-consumption';
-import { IonicRatingModule } from 'ionic4-rating';
 import { TextbookTocService } from '../collection-detail-etb/textbook-toc-service';
 import { ComponentsModule } from '../components/components.module';
 import { EnrolledCourseDetailsPage } from './enrolled-course-details-page';
@@ -24,7 +23,6 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         IonicModule,
-        IonicRatingModule,
         RouterModule.forChild(routes),
         TranslateModule.forChild(),
         PipesModule,

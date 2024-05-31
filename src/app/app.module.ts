@@ -89,6 +89,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { SuiRatingModule} from '@project-sunbird/ng2-semantic-ui';
 // AoT requires an exported function for factories
 export function translateHttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -475,6 +476,7 @@ declare const sbutility;
         deps: [HttpClient]
       }
     }),
+    SuiRatingModule,
     IonicModule.forRoot({
       scrollPadding: false,
       scrollAssist: true,

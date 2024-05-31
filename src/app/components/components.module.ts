@@ -13,7 +13,6 @@ import { SbNoNetworkPopupComponent } from './popups/sb-no-network-popup/sb-no-ne
 import { SbPopoverComponent } from './popups/sb-popover/sb-popover.component';
 import { CollectionChildComponent } from './collection-child/collection-child.component';
 import { ContentActionsComponent } from './content-actions/content-actions.component';
-import { IonicRatingModule } from 'ionic4-rating';
 import { ContentRatingAlertComponent } from './content-rating-alert/content-rating-alert.component';
 import { DetailCardComponent } from './detail-card/detail-card.component';
 import { FileSizePipe } from '../../pipes/file-size/file-size';
@@ -79,6 +78,7 @@ import { ContentShareHandlerService } from '../../services/content/content-share
 import { ShowCertificateComponent } from './show-certificate-component/show-certificate-component.component';
 import { CertificateVerificationPopoverComponent } from './popups/certificate-verification/certificate-verification-popup.component';
 import { DownloadTranscriptPopupComponent } from './popups/download-transcript-popup/download-transcript-popup.component';
+import { SuiRatingModule } from '@project-sunbird/ng2-semantic-ui';
 @NgModule({
     declarations: [
         ApplicationHeaderComponent,
@@ -154,7 +154,7 @@ import { DownloadTranscriptPopupComponent } from './popups/download-transcript-p
         IonicModule,
         PipesModule,
         CommonConsumptionModule,
-        IonicRatingModule,
+        SuiRatingModule,
         DashletModule.forRoot(),
         TranslateModule.forChild(),
     ],

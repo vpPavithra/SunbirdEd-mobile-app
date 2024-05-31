@@ -1,12 +1,27 @@
 var fs = require('fs');
 var readline = require('readline');
+const angularJson = require('../angular.json');
 
+let env = process.env.NODE_ENV;
 let filePath = '';
-if (process.env.NODE_ENV == "staging") {
+if (env == "staging") {
     filePath = 'configurations/configuration.stag.ts';
-} if (process.env.NODE_ENV == "production") {
-    filePath = 'configurations/configuration.prod.ts';
+} else if (env == "production") {
+    filePath = 'configurations/configuration.hmr.ts';
+} else {
+    env = "staging"
+    filePath = 'configurations/configuration.stag.ts';
 }
+
+if (angularJson.projects.app.architect.build.defaultConfiguration) {
+    angularJson.projects.app.architect.build.defaultConfiguration = env;
+} else {
+    angularJson.projects.app.architect.build['defaultConfiguration'] = env;
+}
+
+fs.writeFileSync('angular.json', JSON.stringify(angularJson, null, 2));
+console.log(`Updated default configurations to: build=${env}`);
+
 const properties = {}
 
 updateConfigFile();

@@ -1,3 +1,6 @@
+// from semantic
+@use "./semantic/semantic-overrides" as *;
+@use "./semantic/semantic-rtl" as *;
 // base structure
 //@import "./mixins/mixins";
 @import "./base/base";

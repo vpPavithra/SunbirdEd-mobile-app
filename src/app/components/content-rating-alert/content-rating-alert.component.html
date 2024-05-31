@@ -7,7 +7,8 @@
     </ion-toolbar>
   </ion-header>
   <div class="sb-popover-items popover-ratings">
-    <rating [(ngModel)]="userRating" (ngModelChange)="rateContent($event)"></rating>
+    <sui-rating (valueChange)="rateContent($event)" tabindex="0" [(ngModel)]="userRating" [maximum]="5"
+                class="sb-rating ui rating"></sui-rating>
     <p class="content-rating-detail ion-padding-bottom ion-padding-top" *ngIf="!userRating">
       {{'CONTENT_RATING_SUB_HEADING' | translate}}</p>
     <div class="sb-popover-content-details" *ngIf="userRating">
