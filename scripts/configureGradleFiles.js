@@ -7,7 +7,7 @@ let filePath = '';
 if (env == "staging") {
     filePath = 'configurations/configuration.stag.ts';
 } else if (env == "production") {
-    filePath = 'configurations/configuration.hmr.ts';
+    filePath = 'configurations/configuration.production.ts';
 } else {
     env = "staging"
     filePath = 'configurations/configuration.stag.ts';
